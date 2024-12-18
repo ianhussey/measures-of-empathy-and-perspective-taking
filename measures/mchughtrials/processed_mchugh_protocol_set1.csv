@@ -1,0 +1,57 @@
+scenario,question_1,answer_1,question_2,answer_2
+I have a red brick can you have a green brick.,Which brick do I have?,Red,Which brick do YOU have?,Green
+I have a green brick and you have a red brick.,Which brick do YOU have?,Red,Which brick do I have?,Green
+I am sitting here on the blue chair and you are sitting there on the black chair.,Where am I sitting?,Blue,Where are YOU sitting?,Black
+I am sitting here on the black chair and you are sitting here on the blue chair.,Where are YOU sitting?,Blue,Where am I sitting?,Black
+"Yesterday I was watching television, today I am reading.",What am I doing now?,Reading,What was I doing then?,Television
+"Yesterday I was reading, today I am watching television.",What was I doing then?,Reading,What am I doing now?,Television
+"Yesterday you were reading, today you are watching television.",What are YOU doing now?,Television,What were YOU doing then?,Reading
+"Yesterday you were watching television, today you are reading.",What were YOU doing then?,Television,What are YOU doing now?,Reading
+I have a red brick and you have a green brick. If I was you and you were me.,Which brick would I have?,Green,Which brick would YOU have?,Red
+I have a green brick and you have a red brick. If I was you and you were me.,Which brick would YOU have?,Green,Which brick would I have?,Red
+I have a red brick and you have a green brick. If I was you and you were me.,Which brick would YOU have?,Red,Which brick would I have?,Green
+I have a green brick and you have a red brick. If I was you and you were me.,Which brick would I have?,Red,Which brick would YOU have?,Green
+I am sitting here on the black chair and you are sitting there on the blue chair. If I was you and you were me.,Where would YOU be sitting?,Black,Where would I be sitting?,Blue
+I am sitting here on the black chair and you are sitting there on the blue chair. If I was you and you were me.,Where would I be sitting?,Blue,Where would YOU be sitting?,Black
+I am sitting here on the blue chair and you are sitting there on the black chair. If I was you and you were me.,Where would I be sitting?,Black,Where would YOU be sitting?,Blue
+I am sitting here on the blue chair and you are sitting there on the black chair. If I was you and you were me.,Where would YOU be sitting?,Blue,Where would I be sitting?,Black
+I am sitting here on the blue chair and you are sitting there on the black chair. If here was there and there was here.,Where would YOU be sitting?,Blue,Where would I be sitting?,Black
+I am sitting here on the black chair and you are sitting there on the blue chair. If here was there and there was here.,Where would I be sitting?,Blue,Where would YOU be sitting?,Black
+I am sitting here on the blue chair and you are sitting there on the black chair. If here was there and there was here.,Where would I be sitting?,Black,Where would YOU be sitting?,Blue
+I am sitting here on the black chair and you are sitting there on the blue chair. If here was there and there was here.,Where would YOU be sitting?,Black,Where would I be sitting?,Blue
+"Yesterday I was sitting there on the blue chair, today I am sitting here on the black chair. If here was there and there was here.",Where would I be sitting now?,Blue,Where was I sitting then?,Black
+"Yesterday I was sitting there on the black chair, today I am sitting here on the blue chair. If here was there and there was here.",Where was I sitting then?,Blue,Where would I be sitting now?,Black
+"Yesterday I was sitting there on the blue chair, today I am sitting here on the black chair. If here was there and there was here.",Where was I sitting then?,Black,Where would I be sitting now?,Blue
+"Yesterday I was sitting there on the black chair, today I am sitting here on the blue chair. If here was there and there was here.",Where would I be sitting now?,Black,Where was I sitting then?,Blue
+"Yesterday you were sitting there on the blue chair, today you are sitting here on the black chair. If here was there and there was here.",Where would you be sitting now?,Blue,Where were you sitting then?,Black
+"Yesterday you were sitting there on the blue chair, today you are sitting here on the black chair. If here was there and there was here.",Where were you sitting then?,Black,Where would you be sitting now?,Blue
+"Yesterday you were sitting there on the black chair, today you are sitting here on the blue chair. If here was there and there was here.",Where would you be sitting now?,Black,Where were you sitting then?,Blue
+"Yesterday you were sitting here on the black chair, today you are sitting there on the blue chair. If here was there and there was here.",Where were you sitting then?,Blue,Where would you be sitting now?,Black
+"Yesterday I was watching television, today I am reading. If now was then and then was now.",What was I doing then?,Reading,What would I be doing now?,Television
+"Yesterday I was reading, today I am watching television. If now was then and then was now.",What would I be doing now?,Reading,What was I doing then?,Television
+"Yesterday I was watching television, today I am reading. If now was then and then was now.",What was I doing now?,Television,What would I be doing then?,Reading
+"Yesterday I was reading, today I am watching television. If now was then and then was now.",What was I doing then?,Television,What would I be doing now?,Reading
+"Yesterday you were watching television, today you are reading. If now was then and then was now.",What were you doing then?,Reading,What would you be doing now?,Television
+"Yesterday you were reading, today you are watching television. If now was then and then was now.",What were you doing then?,Television,What would you be doing now?,Reading
+"Yesterday you were watching television, today you are reading. If now was then and then was now.",What would you be doing now?,Television,What were you doing then?,Reading
+"Yesterday you were reading, today you are watching television. If now was then and then was now.",What would you be doing now?,Reading,What were you doing then?,Television
+"Yesterday I was sitting there on the blue chair, today I am sitting here on the black chair. If now was then and then was now.",Where would I be sitting now?,Blue,Where was I sitting then?,Black
+"Yesterday I was sitting there on the blue chair, today I am sitting here on the black chair. If now was then and then was now.",Where was I sitting then?,Black,Where would I be sitting now?,Blue
+"Yesterday I was sitting there on the black chair, today I am sitting here on the blue chair. If now was then and then was now.",Where would I be sitting now?,Black,Where was I sitting then?,Blue
+"Yesterday I was sitting there on the black chair, today I am sitting here on the blue chair. If now was then and then was now.",Where was I sitting then?,Blue,Where would I be sitting now?,Black
+"Yesterday you were sitting there on the blue chair, today you are sitting here on the black chair. If now was then and then was now.",Where were you sitting then?,Black,Where would you be sitting now?,Blue
+"Yesterday you were sitting there on the blue chair, today you are sitting here on the black chair. If now was then and then was now.",Where would you be sitting now?,Blue,Where were you sitting then?,Black
+"Yesterday you were sitting there on the black chair, today you are sitting here on the blue chair. If now was then and then was now.",Where were you sitting then?,Blue,Where would you be sitting now?,Black
+"Yesterday you were sitting there on the black chair, today you are sitting here on the blue chair. If now was then and then was now.",Where would you be sitting now?,Black,Where were you sitting then?,Blue
+I am sitting here on the blue chair and you are sitting there on the black chair. If I was you and you were me and if here was there and there was here.,Where would I be sitting?,Blue,Where would YOU be sitting?,Black
+I am sitting here on the black chair and you are sitting there on the blue chair. If I was you and you were me and if here was there and there was here.,Where would I be sitting?,Black,Where would YOU be sitting?,Blue
+I am sitting here on the blue chair and you are sitting there on the black chair. If I was you and you were me and if here was there and there was here.,Where YOU be sitting?,Black,Where would I be sitting?,Blue
+I am sitting here on the black chair and you are sitting there on the blue chair. If I was you and you were me and if here was there and there was here.,Where would YOU be sitting?,Blue,Where would I be sitting?,Black
+"Yesterday I was sitting there on the blue chair, today I am sitting here on the black chair. If here was there and there was here and If now was then and then was now.",Where would I be sitting then?,Blue,Where would I be sitting now?,Black
+"Yesterday I was sitting there on the blue chair, today I am sitting here on the black chair. If here was there and there was here and If now was then and then was now.",Where would I be sitting now?,Black,Where would I be sitting then?,Blue
+"Yesterday I was sitting there on the black chair, today I am sitting here on the blue chair. If here was there and there was here and If now was then and then was now.",Where would I be sitting then?,Black,Where would I be sitting now?,Blue
+"Yesterday I was sitting there on the black chair, today I am sitting here on the blue chair. If here was there and there was here and If now was then and then was now.",Where would I be sitting now?,Blue,Where would I be sitting then?,Black
+"Yesterday you were sitting there on the blue chair, today you are sitting here on the black chair. If here was there and there was here and If now was then and then was now.",Where would you be sitting then?,Blue,Where would you be sitting now?,Black
+"Yesterday you were sitting here on the blue chair, today you are sitting here on the black chair. If here was there and there was here and If now was then and then was now.",Where would you be sitting now?,Black,Where would you be sitting then?,Blue
+"Yesterday you were sitting there on the black chair, today you are sitting here on the blue chair. If here was there and there was here and If now was then and then was now.",Where would you be sitting then?,Black,Where would you be sitting now?,Blue
+"Yesterday you were sitting there on the black chair, today you are sitting here on the blue chair. If here was there and there was here and If now was then and then was now.",Where would you be sitting now?,Blue,Where would you be sitting then?,Black

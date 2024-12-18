@@ -1,0 +1,1 @@
+Note that item 7 of the perspective taking protocol should be a double reversed item but was implemented as a single reversed item. See the excel file in the measures folder that notes what it should have been and what it was. This should be fixed in any extension of the study.

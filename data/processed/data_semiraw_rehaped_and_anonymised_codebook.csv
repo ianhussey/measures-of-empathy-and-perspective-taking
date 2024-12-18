@@ -1,0 +1,531 @@
+rowname,V1
+start_date_t1,Start Date
+duration_in_seconds_t1,Duration (in seconds)
+age_t1,What is your age? - Age:
+gender_numeric_t1,What is your gender? - Selected Choice
+gender_text_t1,What is your gender? - self-identified: - Text
+attentioncheck_1_t1,"The following statements inquire about your thoughts and feelings in a variety of
+situations. For each item, indicate how well it describes you by choosing the appropriate
+letter on the scale at the top of the page: A, B, C, D, or E. READ EACH ITEM CAREFULLY
+BEFORE RESPONDING. Answer as honestly as you can. Thank you. - Please choose the option 'C'. This is an attention check."
+attentioncheck_2_t1,"Below is a list of statements. Please read each statement carefully and rate how strongly you agree or disagree with it by choosing your answer. There are no right or wrong answers, or trick questions.
+
+
+
+Examples: - Please choose the option 'strongly agree'. This is an attention check."
+sites_t1,To what extent does the following statement describe you: “I am an empathetic person”?
+iri_1_t1,"The following statements inquire about your thoughts and feelings in a variety of
+situations. For each item, indicate how well it describes you by choosing the appropriate
+letter on the scale at the top of the page: A, B, C, D, or E. READ EACH ITEM CAREFULLY
+BEFORE RESPONDING. Answer as honestly as you can. Thank you. - I daydream and fantasize, with some regularity, about things that might happen to me."
+iri_2_t1,"The following statements inquire about your thoughts and feelings in a variety of
+situations. For each item, indicate how well it describes you by choosing the appropriate
+letter on the scale at the top of the page: A, B, C, D, or E. READ EACH ITEM CAREFULLY
+BEFORE RESPONDING. Answer as honestly as you can. Thank you. - I often have tender, concerned feelings for people less fortunate than me."
+iri_3_t1,"The following statements inquire about your thoughts and feelings in a variety of
+situations. For each item, indicate how well it describes you by choosing the appropriate
+letter on the scale at the top of the page: A, B, C, D, or E. READ EACH ITEM CAREFULLY
+BEFORE RESPONDING. Answer as honestly as you can. Thank you. - I sometimes find it difficult to see things from the ""other guy's"" point of view."
+iri_4_t1,"The following statements inquire about your thoughts and feelings in a variety of
+situations. For each item, indicate how well it describes you by choosing the appropriate
+letter on the scale at the top of the page: A, B, C, D, or E. READ EACH ITEM CAREFULLY
+BEFORE RESPONDING. Answer as honestly as you can. Thank you. - Sometimes I don't feel very sorry for other people when they are having problems."
+iri_5_t1,"The following statements inquire about your thoughts and feelings in a variety of
+situations. For each item, indicate how well it describes you by choosing the appropriate
+letter on the scale at the top of the page: A, B, C, D, or E. READ EACH ITEM CAREFULLY
+BEFORE RESPONDING. Answer as honestly as you can. Thank you. - I really get involved with the feelings of the characters in a novel."
+iri_6_t1,"The following statements inquire about your thoughts and feelings in a variety of
+situations. For each item, indicate how well it describes you by choosing the appropriate
+letter on the scale at the top of the page: A, B, C, D, or E. READ EACH ITEM CAREFULLY
+BEFORE RESPONDING. Answer as honestly as you can. Thank you. - In emergency situations, I feel apprehensive and ill-at-ease."
+iri_7_t1,"The following statements inquire about your thoughts and feelings in a variety of
+situations. For each item, indicate how well it describes you by choosing the appropriate
+letter on the scale at the top of the page: A, B, C, D, or E. READ EACH ITEM CAREFULLY
+BEFORE RESPONDING. Answer as honestly as you can. Thank you. - I am usually objective when I watch a movie or play, and I don't often get completely caught up in it."
+iri_8_t1,"The following statements inquire about your thoughts and feelings in a variety of
+situations. For each item, indicate how well it describes you by choosing the appropriate
+letter on the scale at the top of the page: A, B, C, D, or E. READ EACH ITEM CAREFULLY
+BEFORE RESPONDING. Answer as honestly as you can. Thank you. - I try to look at everybody's side of a disagreement before I make a decision."
+iri_9_t1,"The following statements inquire about your thoughts and feelings in a variety of
+situations. For each item, indicate how well it describes you by choosing the appropriate
+letter on the scale at the top of the page: A, B, C, D, or E. READ EACH ITEM CAREFULLY
+BEFORE RESPONDING. Answer as honestly as you can. Thank you. - When I see someone being taken advantage of, I feel kind of protective towards them."
+iri_10_t1,"The following statements inquire about your thoughts and feelings in a variety of
+situations. For each item, indicate how well it describes you by choosing the appropriate
+letter on the scale at the top of the page: A, B, C, D, or E. READ EACH ITEM CAREFULLY
+BEFORE RESPONDING. Answer as honestly as you can. Thank you. - I sometimes feel helpless when I am in the middle of a very emotional situation."
+iri_11_t1,"The following statements inquire about your thoughts and feelings in a variety of
+situations. For each item, indicate how well it describes you by choosing the appropriate
+letter on the scale at the top of the page: A, B, C, D, or E. READ EACH ITEM CAREFULLY
+BEFORE RESPONDING. Answer as honestly as you can. Thank you. - I sometimes try to understand my friends better by imagining how things look from their perspective."
+iri_12_t1,"The following statements inquire about your thoughts and feelings in a variety of
+situations. For each item, indicate how well it describes you by choosing the appropriate
+letter on the scale at the top of the page: A, B, C, D, or E. READ EACH ITEM CAREFULLY
+BEFORE RESPONDING. Answer as honestly as you can. Thank you. - Becoming extremely involved in a good book or movie is somewhat rare for me."
+iri_13_t1,"The following statements inquire about your thoughts and feelings in a variety of
+situations. For each item, indicate how well it describes you by choosing the appropriate
+letter on the scale at the top of the page: A, B, C, D, or E. READ EACH ITEM CAREFULLY
+BEFORE RESPONDING. Answer as honestly as you can. Thank you. - When I see someone get hurt, I tend to remain calm."
+iri_14_t1,"The following statements inquire about your thoughts and feelings in a variety of
+situations. For each item, indicate how well it describes you by choosing the appropriate
+letter on the scale at the top of the page: A, B, C, D, or E. READ EACH ITEM CAREFULLY
+BEFORE RESPONDING. Answer as honestly as you can. Thank you. - Other people's misfortunes do not usually disturb me a great deal."
+iri_15_t1,"The following statements inquire about your thoughts and feelings in a variety of
+situations. For each item, indicate how well it describes you by choosing the appropriate
+letter on the scale at the top of the page: A, B, C, D, or E. READ EACH ITEM CAREFULLY
+BEFORE RESPONDING. Answer as honestly as you can. Thank you. - If I'm sure I'm right about something, I don't waste much time listening to other people's arguments."
+iri_16_t1,"The following statements inquire about your thoughts and feelings in a variety of
+situations. For each item, indicate how well it describes you by choosing the appropriate
+letter on the scale at the top of the page: A, B, C, D, or E. READ EACH ITEM CAREFULLY
+BEFORE RESPONDING. Answer as honestly as you can. Thank you. - After seeing a play or movie, I have felt as though I were one of the characters."
+iri_17_t1,"The following statements inquire about your thoughts and feelings in a variety of
+situations. For each item, indicate how well it describes you by choosing the appropriate
+letter on the scale at the top of the page: A, B, C, D, or E. READ EACH ITEM CAREFULLY
+BEFORE RESPONDING. Answer as honestly as you can. Thank you. - Being in a tense emotional situation scares me."
+iri_18_t1,"The following statements inquire about your thoughts and feelings in a variety of
+situations. For each item, indicate how well it describes you by choosing the appropriate
+letter on the scale at the top of the page: A, B, C, D, or E. READ EACH ITEM CAREFULLY
+BEFORE RESPONDING. Answer as honestly as you can. Thank you. - When I see someone being treated unfairly, I sometimes don't feel very much pity for them."
+iri_19_t1,"The following statements inquire about your thoughts and feelings in a variety of
+situations. For each item, indicate how well it describes you by choosing the appropriate
+letter on the scale at the top of the page: A, B, C, D, or E. READ EACH ITEM CAREFULLY
+BEFORE RESPONDING. Answer as honestly as you can. Thank you. - I am usually pretty effective in dealing with emergencies."
+iri_20_t1,"The following statements inquire about your thoughts and feelings in a variety of
+situations. For each item, indicate how well it describes you by choosing the appropriate
+letter on the scale at the top of the page: A, B, C, D, or E. READ EACH ITEM CAREFULLY
+BEFORE RESPONDING. Answer as honestly as you can. Thank you. - I am often quite touched by things that I see happen."
+iri_21_t1,"The following statements inquire about your thoughts and feelings in a variety of
+situations. For each item, indicate how well it describes you by choosing the appropriate
+letter on the scale at the top of the page: A, B, C, D, or E. READ EACH ITEM CAREFULLY
+BEFORE RESPONDING. Answer as honestly as you can. Thank you. - I believe that there are two sides to every question and try to look at them both."
+iri_22_t1,"The following statements inquire about your thoughts and feelings in a variety of
+situations. For each item, indicate how well it describes you by choosing the appropriate
+letter on the scale at the top of the page: A, B, C, D, or E. READ EACH ITEM CAREFULLY
+BEFORE RESPONDING. Answer as honestly as you can. Thank you. - I would describe myself as a pretty soft-hearted person."
+iri_23_t1,"The following statements inquire about your thoughts and feelings in a variety of
+situations. For each item, indicate how well it describes you by choosing the appropriate
+letter on the scale at the top of the page: A, B, C, D, or E. READ EACH ITEM CAREFULLY
+BEFORE RESPONDING. Answer as honestly as you can. Thank you. - When I watch a good movie, I can very easily put myself in the place of a leading character."
+iri_24_t1,"The following statements inquire about your thoughts and feelings in a variety of
+situations. For each item, indicate how well it describes you by choosing the appropriate
+letter on the scale at the top of the page: A, B, C, D, or E. READ EACH ITEM CAREFULLY
+BEFORE RESPONDING. Answer as honestly as you can. Thank you. - I tend to lose control during emergencies."
+iri_25_t1,"The following statements inquire about your thoughts and feelings in a variety of
+situations. For each item, indicate how well it describes you by choosing the appropriate
+letter on the scale at the top of the page: A, B, C, D, or E. READ EACH ITEM CAREFULLY
+BEFORE RESPONDING. Answer as honestly as you can. Thank you. - When I'm upset at someone, I usually try to ""put myself in his shoes"" for a while."
+iri_26_t1,"The following statements inquire about your thoughts and feelings in a variety of
+situations. For each item, indicate how well it describes you by choosing the appropriate
+letter on the scale at the top of the page: A, B, C, D, or E. READ EACH ITEM CAREFULLY
+BEFORE RESPONDING. Answer as honestly as you can. Thank you. - When I am reading an interesting story or novel, I imagine how I would feel if the events in the story were happening to me."
+iri_27_t1,"The following statements inquire about your thoughts and feelings in a variety of
+situations. For each item, indicate how well it describes you by choosing the appropriate
+letter on the scale at the top of the page: A, B, C, D, or E. READ EACH ITEM CAREFULLY
+BEFORE RESPONDING. Answer as honestly as you can. Thank you. - When I see someone who badly needs help in an emergency, I go to pieces."
+iri_28_t1,"The following statements inquire about your thoughts and feelings in a variety of
+situations. For each item, indicate how well it describes you by choosing the appropriate
+letter on the scale at the top of the page: A, B, C, D, or E. READ EACH ITEM CAREFULLY
+BEFORE RESPONDING. Answer as honestly as you can. Thank you. - Before criticizing somebody, I try to imagine how I would feel if I were in their place."
+iri_start_t1,Timing - First Click
+iri_end_t1,Timing - Last Click
+eq_1_t1,"Below is a list of statements. Please read each statement carefully and rate how strongly you agree or disagree with it by choosing your answer. There are no right or wrong answers, or trick questions.
+
+
+
+Examples: - I can easily tell if someone else wants to enter a conversation."
+eq_2_t1,"Below is a list of statements. Please read each statement carefully and rate how strongly you agree or disagree with it by choosing your answer. There are no right or wrong answers, or trick questions.
+
+
+
+Examples: - I prefer animals to humans."
+eq_3_t1,"Below is a list of statements. Please read each statement carefully and rate how strongly you agree or disagree with it by choosing your answer. There are no right or wrong answers, or trick questions.
+
+
+
+Examples: - I try to keep up with the current trends and fashions."
+eq_4_t1,"Below is a list of statements. Please read each statement carefully and rate how strongly you agree or disagree with it by choosing your answer. There are no right or wrong answers, or trick questions.
+
+
+
+Examples: - I find it difficult to explain to others things that I understand easily, when they don’t understand it first time."
+eq_5_t1,"Below is a list of statements. Please read each statement carefully and rate how strongly you agree or disagree with it by choosing your answer. There are no right or wrong answers, or trick questions.
+
+
+
+Examples: - I dream most nights."
+eq_6_t1,"Below is a list of statements. Please read each statement carefully and rate how strongly you agree or disagree with it by choosing your answer. There are no right or wrong answers, or trick questions.
+
+
+
+Examples: - I really enjoy caring for other people."
+eq_7_t1,"Below is a list of statements. Please read each statement carefully and rate how strongly you agree or disagree with it by choosing your answer. There are no right or wrong answers, or trick questions.
+
+
+
+Examples: - I try to solve my own problems rather than discussing them with others."
+eq_8_t1,"Below is a list of statements. Please read each statement carefully and rate how strongly you agree or disagree with it by choosing your answer. There are no right or wrong answers, or trick questions.
+
+
+
+Examples: - I find it hard to know what to do in a social situation."
+eq_9_t1,"Below is a list of statements. Please read each statement carefully and rate how strongly you agree or disagree with it by choosing your answer. There are no right or wrong answers, or trick questions.
+
+
+
+Examples: - I am at my best first thing in the morning."
+eq_10_t1,"Below is a list of statements. Please read each statement carefully and rate how strongly you agree or disagree with it by choosing your answer. There are no right or wrong answers, or trick questions.
+
+
+
+Examples: - People often tell me that I went too far in driving my point home in a discussion."
+eq_11_t1,"Below is a list of statements. Please read each statement carefully and rate how strongly you agree or disagree with it by choosing your answer. There are no right or wrong answers, or trick questions.
+
+
+
+Examples: - It doesn’t bother me too much if I am late meeting a friend."
+eq_12_t1,"Below is a list of statements. Please read each statement carefully and rate how strongly you agree or disagree with it by choosing your answer. There are no right or wrong answers, or trick questions.
+
+
+
+Examples: - Friendships and relationships are just too difficult, so I tend not to bother with them."
+eq_13_t1,"Below is a list of statements. Please read each statement carefully and rate how strongly you agree or disagree with it by choosing your answer. There are no right or wrong answers, or trick questions.
+
+
+
+Examples: - I would never break a law, no matter how minor."
+eq_14_t1,"Below is a list of statements. Please read each statement carefully and rate how strongly you agree or disagree with it by choosing your answer. There are no right or wrong answers, or trick questions.
+
+
+
+Examples: - I often find it difficult to judge if something is rude or polite."
+eq_15_t1,"Below is a list of statements. Please read each statement carefully and rate how strongly you agree or disagree with it by choosing your answer. There are no right or wrong answers, or trick questions.
+
+
+
+Examples: - In a conversation, I tend to focus on my own thoughts rather than on what my listener might be thinking."
+eq_16_t1,"Below is a list of statements. Please read each statement carefully and rate how strongly you agree or disagree with it by choosing your answer. There are no right or wrong answers, or trick questions.
+
+
+
+Examples: - I prefer practical jokes to verbal humor."
+eq_17_t1,"Below is a list of statements. Please read each statement carefully and rate how strongly you agree or disagree with it by choosing your answer. There are no right or wrong answers, or trick questions.
+
+
+
+Examples: - I live life for today rather than the future."
+eq_18_t1,"Below is a list of statements. Please read each statement carefully and rate how strongly you agree or disagree with it by choosing your answer. There are no right or wrong answers, or trick questions.
+
+
+
+Examples: - When I was a child, I enjoyed cutting up worms to see what would happen."
+eq_19_t1,"Below is a list of statements. Please read each statement carefully and rate how strongly you agree or disagree with it by choosing your answer. There are no right or wrong answers, or trick questions.
+
+
+
+Examples: - I can pick up quickly if someone says one thing but means another."
+eq_20_t1,"Below is a list of statements. Please read each statement carefully and rate how strongly you agree or disagree with it by choosing your answer. There are no right or wrong answers, or trick questions.
+
+
+
+Examples: - I tend to have very strong opinions about morality."
+eq_21_t1,"Below is a list of statements. Please read each statement carefully and rate how strongly you agree or disagree with it by choosing your answer. There are no right or wrong answers, or trick questions.
+
+
+
+Examples: - It is hard for me to see why some things upset people so much."
+eq_22_t1,"Below is a list of statements. Please read each statement carefully and rate how strongly you agree or disagree with it by choosing your answer. There are no right or wrong answers, or trick questions.
+
+
+
+Examples: - I find it easy to put myself in somebody else’s shoes."
+eq_23_t1,"Below is a list of statements. Please read each statement carefully and rate how strongly you agree or disagree with it by choosing your answer. There are no right or wrong answers, or trick questions.
+
+
+
+Examples: - I think that good manners are the most important thing a parent can teach their child."
+eq_24_t1,"Below is a list of statements. Please read each statement carefully and rate how strongly you agree or disagree with it by choosing your answer. There are no right or wrong answers, or trick questions.
+
+
+
+Examples: - I like to do things on the spur of the moment."
+eq_25_t1,"Below is a list of statements. Please read each statement carefully and rate how strongly you agree or disagree with it by choosing your answer. There are no right or wrong answers, or trick questions.
+
+
+
+Examples: - I am good at predicting how someone will feel."
+eq_26_t1,"Below is a list of statements. Please read each statement carefully and rate how strongly you agree or disagree with it by choosing your answer. There are no right or wrong answers, or trick questions.
+
+
+
+Examples: - I am quick to spot when someone in a group is feeling awkward or uncomfortable."
+eq_27_t1,"Below is a list of statements. Please read each statement carefully and rate how strongly you agree or disagree with it by choosing your answer. There are no right or wrong answers, or trick questions.
+
+
+
+Examples: - If I say something that someone else is offended by, I think that that’s their problem, not mine."
+eq_28_t1,"Below is a list of statements. Please read each statement carefully and rate how strongly you agree or disagree with it by choosing your answer. There are no right or wrong answers, or trick questions.
+
+
+
+Examples: - If anyone asked me if I liked their haircut, I would reply truthfully, even if I didn’t like it."
+eq_29_t1,"Below is a list of statements. Please read each statement carefully and rate how strongly you agree or disagree with it by choosing your answer. There are no right or wrong answers, or trick questions.
+
+
+
+Examples: - I can’t always see why someone should have felt offended by a remark."
+eq_30_t1,"Below is a list of statements. Please read each statement carefully and rate how strongly you agree or disagree with it by choosing your answer. There are no right or wrong answers, or trick questions.
+
+
+
+Examples: - People often tell me that I am very unpredictable."
+eq_31_t1,"Below is a list of statements. Please read each statement carefully and rate how strongly you agree or disagree with it by choosing your answer. There are no right or wrong answers, or trick questions.
+
+
+
+Examples: - I enjoy being the center of attention at any social gathering."
+eq_32_t1,"Below is a list of statements. Please read each statement carefully and rate how strongly you agree or disagree with it by choosing your answer. There are no right or wrong answers, or trick questions.
+
+
+
+Examples: - Seeing people cry doesn’t really upset me."
+eq_33_t1,"Below is a list of statements. Please read each statement carefully and rate how strongly you agree or disagree with it by choosing your answer. There are no right or wrong answers, or trick questions.
+
+
+
+Examples: - I enjoy having discussions about politics."
+eq_34_t1,"Below is a list of statements. Please read each statement carefully and rate how strongly you agree or disagree with it by choosing your answer. There are no right or wrong answers, or trick questions.
+
+
+
+Examples: - I am very blunt, which some people take to be rudeness, even though this is unintentional."
+eq_35_t1,"Below is a list of statements. Please read each statement carefully and rate how strongly you agree or disagree with it by choosing your answer. There are no right or wrong answers, or trick questions.
+
+
+
+Examples: - I don’t tend to find social situations confusing."
+eq_36_t1,"Below is a list of statements. Please read each statement carefully and rate how strongly you agree or disagree with it by choosing your answer. There are no right or wrong answers, or trick questions.
+
+
+
+Examples: - Other people tell me I am good at understanding how they are feeling and what they are thinking."
+eq_37_t1,"Below is a list of statements. Please read each statement carefully and rate how strongly you agree or disagree with it by choosing your answer. There are no right or wrong answers, or trick questions.
+
+
+
+Examples: - When I talk to people, I tend to talk about their experiences rather than my own."
+eq_38_t1,"Below is a list of statements. Please read each statement carefully and rate how strongly you agree or disagree with it by choosing your answer. There are no right or wrong answers, or trick questions.
+
+
+
+Examples: - It upsets me to see an animal in pain."
+eq_39_t1,"Below is a list of statements. Please read each statement carefully and rate how strongly you agree or disagree with it by choosing your answer. There are no right or wrong answers, or trick questions.
+
+
+
+Examples: - I am able to make decisions without being influenced by people’s feelings."
+eq_40_t1,"Below is a list of statements. Please read each statement carefully and rate how strongly you agree or disagree with it by choosing your answer. There are no right or wrong answers, or trick questions.
+
+
+
+Examples: - I can’t relax until I have done everything I had planned to do that day."
+eq_41_t1,"Below is a list of statements. Please read each statement carefully and rate how strongly you agree or disagree with it by choosing your answer. There are no right or wrong answers, or trick questions.
+
+
+
+Examples: - I can easily tell if someone else is interested or bored with what I am saying."
+eq_42_t1,"Below is a list of statements. Please read each statement carefully and rate how strongly you agree or disagree with it by choosing your answer. There are no right or wrong answers, or trick questions.
+
+
+
+Examples: - I get upset if I see people suffering on news programmes."
+eq_43_t1,"Below is a list of statements. Please read each statement carefully and rate how strongly you agree or disagree with it by choosing your answer. There are no right or wrong answers, or trick questions.
+
+
+
+Examples: - Friends usually talk to me about their problems as they say that I am very understanding."
+eq_44_t1,"Below is a list of statements. Please read each statement carefully and rate how strongly you agree or disagree with it by choosing your answer. There are no right or wrong answers, or trick questions.
+
+
+
+Examples: - I can sense if I am intruding, even if the other person doesn’t tell me."
+eq_45_t1,"Below is a list of statements. Please read each statement carefully and rate how strongly you agree or disagree with it by choosing your answer. There are no right or wrong answers, or trick questions.
+
+
+
+Examples: - I often start new hobbies but quickly become bored with them and move on to something else."
+eq_46_t1,"Below is a list of statements. Please read each statement carefully and rate how strongly you agree or disagree with it by choosing your answer. There are no right or wrong answers, or trick questions.
+
+
+
+Examples: - People sometimes tell me that I have gone too far with teasing."
+eq_47_t1,"Below is a list of statements. Please read each statement carefully and rate how strongly you agree or disagree with it by choosing your answer. There are no right or wrong answers, or trick questions.
+
+
+
+Examples: - I would be too nervous to go on a big rollercoaster."
+eq_48_t1,"Below is a list of statements. Please read each statement carefully and rate how strongly you agree or disagree with it by choosing your answer. There are no right or wrong answers, or trick questions.
+
+
+
+Examples: - Other people, often say that I am insensitive, though I don’t always see why."
+eq_49_t1,"Below is a list of statements. Please read each statement carefully and rate how strongly you agree or disagree with it by choosing your answer. There are no right or wrong answers, or trick questions.
+
+
+
+Examples: - If I see a stranger in a group, I think that it is up to them to make an effort to join in."
+eq_50_t1,"Below is a list of statements. Please read each statement carefully and rate how strongly you agree or disagree with it by choosing your answer. There are no right or wrong answers, or trick questions.
+
+
+
+Examples: - I usually stay emotionally detached when watching a film."
+eq_51_t1,"Below is a list of statements. Please read each statement carefully and rate how strongly you agree or disagree with it by choosing your answer. There are no right or wrong answers, or trick questions.
+
+
+
+Examples: - I like to be very organized in day-to-day life and often make lists of the chores I have to do."
+eq_52_t1,"Below is a list of statements. Please read each statement carefully and rate how strongly you agree or disagree with it by choosing your answer. There are no right or wrong answers, or trick questions.
+
+
+
+Examples: - I can tune into how someone else feels rapidly and intuitively."
+eq_53_t1,"Below is a list of statements. Please read each statement carefully and rate how strongly you agree or disagree with it by choosing your answer. There are no right or wrong answers, or trick questions.
+
+
+
+Examples: - I don’t like to take risks."
+eq_54_t1,"Below is a list of statements. Please read each statement carefully and rate how strongly you agree or disagree with it by choosing your answer. There are no right or wrong answers, or trick questions.
+
+
+
+Examples: - I can easily work out what another person might want to talk about."
+eq_55_t1,"Below is a list of statements. Please read each statement carefully and rate how strongly you agree or disagree with it by choosing your answer. There are no right or wrong answers, or trick questions.
+
+
+
+Examples: - I can tell if someone is masking their true emotion."
+eq_56_t1,"Below is a list of statements. Please read each statement carefully and rate how strongly you agree or disagree with it by choosing your answer. There are no right or wrong answers, or trick questions.
+
+
+
+Examples: - Before making a decision I always weigh up the pros and cons."
+eq_57_t1,"Below is a list of statements. Please read each statement carefully and rate how strongly you agree or disagree with it by choosing your answer. There are no right or wrong answers, or trick questions.
+
+
+
+Examples: - I don’t consciously work out the rules of social situations."
+eq_58_t1,"Below is a list of statements. Please read each statement carefully and rate how strongly you agree or disagree with it by choosing your answer. There are no right or wrong answers, or trick questions.
+
+
+
+Examples: - I am good at predicting what someone will do."
+eq_59_t1,"Below is a list of statements. Please read each statement carefully and rate how strongly you agree or disagree with it by choosing your answer. There are no right or wrong answers, or trick questions.
+
+
+
+Examples: - I tend to get emotionally involved with a friend’s problems."
+eq_60_t1,"Below is a list of statements. Please read each statement carefully and rate how strongly you agree or disagree with it by choosing your answer. There are no right or wrong answers, or trick questions.
+
+
+
+Examples: - I can usually appreciate the other person’s viewpoint, even if I don’t agree with it."
+eq_start_t1,Timing - First Click
+eq_end_t1,Timing - Last Click
+pet_1_t1,How emotionally moving do you find the photograph?
+pet_2_t1,How emotionally moving do you find the photograph?
+pet_3_t1,How emotionally moving do you find the photograph?
+pet_4_t1,How emotionally moving do you find the photograph?
+pet_5_t1,How emotionally moving do you find the photograph?
+pet_6_t1,How emotionally moving do you find the photograph?
+pet_7_t1,How emotionally moving do you find the photograph?
+pet_start_t1,Timing - First Click
+pet_end_t1,Timing - Page Submit
+eyes_1_t1,EYES_1
+eyes_2_t1,EYES_2
+eyes_3_t1,EYES_3
+eyes_4_t1,EYES_4
+eyes_5_t1,EYES_5
+eyes_6_t1,EYES_6
+eyes_7_t1,EYES_7
+eyes_8_t1,EYES_8
+eyes_9_t1,EYES_9
+eyes_10_t1,EYES_10
+eyes_11_t1,EYES_11
+eyes_12_t1,EYES_12
+eyes_13_t1,EYES_13
+eyes_14_t1,EYES_14
+eyes_15_t1,EYES_15
+eyes_16_t1,EYES_16
+eyes_17_t1,EYES_17
+eyes_18_t1,EYES_18
+eyes_19_t1,EYES_19
+eyes_20_t1,EYES_20
+eyes_21_t1,EYES_21
+eyes_22_t1,EYES_22
+eyes_23_t1,EYES_23
+eyes_24_t1,EYES_24
+eyes_25_t1,EYES_25
+eyes_26_t1,EYES_26
+eyes_27_t1,EYES_27
+eyes_28_t1,EYES_28
+eyes_29_t1,EYES_29
+eyes_30_t1,EYES_30
+eyes_31_t1,EYES_31
+eyes_32_t1,EYES_32
+eyes_33_t1,EYES_33
+eyes_34_t1,EYES_34
+eyes_35_t1,EYES_35
+eyes_36_t1,EYES_36
+eyes_start_t1,Timing - First Click
+eyes_end_t1,Timing - Page Submit
+ptt_1_t1,PTT-A_test1
+ptt_2_t1,PTT-A_test2
+ptt_3_t1,PTT-A_test3
+ptt_4_t1,PTT-A_test4
+ptt_5_t1,PTT-A_test5
+ptt_6_t1,PTT-A_test6
+ptt_7_t1,PTT-A_test7
+ptt_8_t1,PTT-A_test8
+ptt_9_t1,PTT-A_test9
+ptt_10_t1,PTT-A_test10
+ptt_11_t1,PTT-A_test11
+ptt_12_t1,PTT-A_test12
+ptt_13_t1,PTT-A_test13
+ptt_14_t1,PTT-A_test14
+ptt_15_t1,PTT-A_test15
+ptt_16_t1,PTT-A_test16
+ptt_17_t1,PTT-A_test17
+ptt_18_t1,PTT-A_test18
+ptt_19_t1,PTT-A_test19
+ptt_20_t1,PTT-A_test20
+ptt_21_t1,PTT-A_test21
+ptt_22_t1,PTT-A_test22
+ptt_23_t1,PTT-A_test23
+ptt_24_t1,PTT-A_test24
+ptt_25_t1,PTT-A_test25
+ptt_26_t1,PTT-A_test26
+ptt_27_t1,PTT-A_test27
+ptt_28_t1,PTT-A_test28
+ptt_29_t1,PTT-A_test29
+ptt_30_t1,PTT-A_test30
+ptt_31_t1,PTT-A_test31
+ptt_32_t1,PTT-A_test32
+ptp_1_t1,"I have a red Lego brick and you have a green Lego brick.
+Which Lego brick do I have?"
+ptp_2_t1,"I am sitting here on the black chair and you are sitting there on the blue chair.
+Where am I sitting?"
+ptp_3_t1,"Yesterday I was reading, today I am watching television.
+What am I doing now?"
+ptp_4_t1,"I have a red Lego brick and you have a green Lego brick.
+If I were you and you were me, which Lego brick would I have?"
+ptp_5_t1,"I am sitting here on the black chair and you are sitting there on the blue chair.
+If here were there and there were here, where would I be sitting?"
+ptp_6_t1,"Yesterday I was reading, today I am watching television.
+If now were then and then were now, what would I be doing now?"
+ptp_7_t1,"I am sitting here on the black chair and you are sitting there on the blue chair.
+If here were there and there were here, where would I be sitting?"
+ptp_8_t1,"Yesterday I was sitting there on the blue chair, today I am sitting here on the black chair.
+If here were there and there were here, and if now were then and then were now, where would I be sitting now?"
+ptp_9_t1,"Yesterday I was reading there in the blue chair, today I am watching television here in the black chair.
+If here were there and there were here, and if now were then and then were now, what would I be doing now?"
+ptp_start_t1,Timing - First Click
+ptp_end_t1,Timing - Page Submit

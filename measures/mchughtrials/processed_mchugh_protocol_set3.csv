@@ -1,0 +1,25 @@
+scenario,question_1,answer_1,question_2,answer_2
+I have the hamburger and you have the grilled cheese.,Which sandwich do I have?,Hamburger,Which sandwich do you have?,Grilled cheese
+You have the hamburger and I have the grilled cheese.,Which sandwich do you have?,Hamburger,Which sandwich do I have?,Grilled cheese
+"If I’m standing in the classroom, and you’re standing on the playground.",Where are you standing?,Playground,Where am I standing?,Classroom
+"If you’re standing in the classroom, and I’m standing on the playground.",Where am I standing?,Playground,Where are you standing?,Classroom
+"Yesterday I was playing X-Box, today I am watching “The Incredibles.",” What was I doing then?,X-Box,What am I doing now?,“The Incredibles”
+"Today you are watching “The Incredibles,” yesterday you were playing X-Box.",What are you doing now?,“The Incredibles”,What were you doing then?,X-Box
+"Yesterday you were reading comic books, today you are talking on the phone.",What are you doing now?,Phone,What were you doing then?,Comic books
+"Today I am talking on the phone, yesterday I was reading comic books.",What was I doing then?,Comic books,What am I doing now?,Phone
+"I am holding the puppy and you are holding the kitten, if I was you and you were me.",Which animal am I holding?,Kitten,Which animal are you holding?,Puppy
+"You are holding the puppy and I am holding the kitten, if I was you and you were me.",Which animal are you holding?,Kitten,Which animal am I holding?,Puppy
+"Yesterday I was swimming there in the pool, today I am swimming here in the lake, if here was there and there was here.",Where was I swimming then?,Lake,Where am I swimming now?,Pool
+"Today you are swimming here in the lake, yesterday you were swimming there in the pool, if here was there and there was here.",Where are you swimming now?,Pool,Where were you swimming then?,Lake
+Yesterday I was doing my homework; today I am taking a nap. If now was then and then was now.,What would I be doing now?,Homework,What was I doing then?,Nap
+Today you are doing your homework; yesterday you were taking a nap. If now was then and then was now.,What were you doing then?,Homework,What would you be doing now?,Nap
+"Yesterday you were playing soccer, today you are playing basketball. If now was then and then was now.",What were you doing then?,Basketball,What would you be doing now?,Soccer
+"Today I am playing soccer, yesterday I was playing basketball. If now was then and then was now.",What would I be doing now?,Basketball,What was I doing then?,Soccer
+I am sleeping here in the bedroom and you are sleeping there in the living room. If I was you and you were me and if here was there and there was here.,Where would I be sleeping?,Bedroom,Where would you be sleeping?,Living room
+"You are sleeping here in the living room, and I am sleeping there in the bedroom. If I was you and you were me and if here was there and there was here.",Where would you be sleeping?,Living room,Where would I be sleeping?,Bedroom
+I am eating here at McDonalds and you are eating there at Wendy’s. If I was you and you were me and if here was there and there was here.,Where would you be eating?,Wendy’s,Where would I be eating?,McDonalds
+You are eating here at Wendy’s and I am eating there at McDonalds. If I was you and you were me and if here was there and there was here.,Where would I be eating?,McDonalds,Where would you be eating?,Wendy’s
+Yesterday I was shopping there at the mall; today I am shopping here at the grocery store. If here was there and there was here and if now was then and then was now.,Where would I be shopping then?,Mall,Where would I be shopping now?,Grocery store
+Today you are shopping here at the mall; yesterday you were shopping there at the grocery store. If here was there and there was here and if now was then and then was now.,Where would you be shopping now?,Mall,Where would you be shopping then?,Grocery store
+Yesterday you were running there in the park; today you are running here in gym class. If here was there and there was here and if now was then and then was now.,Where would you be running now?,Gym class,Where would you be running then?,Park
+Today I am running here in the park; yesterday I was running there in gym class. If here was there and there was here and if now was then and then was now.,Where would I be running then?,Gym class,Where would I be running now?,Park

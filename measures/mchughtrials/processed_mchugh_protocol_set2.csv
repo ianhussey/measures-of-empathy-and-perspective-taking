@@ -1,0 +1,57 @@
+scenario,question_1,answer_1,question_2,answer_2
+I have an orange pencil and you have a yellow pencil.,Which pencil do I have?,Orange,Which pencil do YOU have?,Yellow
+I have a yellow pencil and you have an orange pencil.,Which pencil do YOU have?,Orange,Which pencil do I have?,Yellow
+I am sitting here on the pink couch and you are sitting there on the purple couch.,Where am I sitting?,Pink,Where are YOU sitting?,Purple
+I am sitting here on the purple couch and you are sitting here on the pink couch.,Where are YOU sitting?,Pink,Where am I sitting?,Purple
+"Yesterday I was playing video games, today I am listening to music.",What am I doing now?,Listening to music,What was I doing then?,Video games
+"Yesterday I was listening to music, today I am playing video games.",What was I doing then?,Listening to music,What am I doing now?,Video games
+"Yesterday you were listening to music, today you are playing video games.",What are YOU doing now?,Video games,What were YOU doing then?,Listening to music
+"Yesterday you were playing video games, today you are listening to music.",What were YOU doing then?,Video games,What are YOU doing now?,Listening to music
+I have an orange pencil and you have a yellow pencil. If I was you and you were me.,Which pencil would I have?,Yellow,Which pencil would YOU have?,Orange
+I have a yellow pencil and you have an orange pencil.,If I was you and you were me Which pencil would YOU have?,Yellow,Which pencil would I have?,Orange
+I have an orange pencil and you have a yellow pencil. If I was you and you were me.,Which pencil would YOU have?,Orange,Which pencil would I have?,Yellow
+I have a yellow pencil and you have an orange pencil.,If I was you and you were me Which pencil would I have?,Orange,Which pencil would YOU have?,Yellow
+I am sitting here on the purple couch and you are sitting there on the pink couch. If I was you and you were me.,Where would YOU be sitting?,Purple,Where would I be sitting?,Pink
+I am sitting here on the purple couch and you are sitting there on the pink couch. If I was you and you were me.,Where would I be sitting?,Pink,Where would YOU be sitting?,Purple
+I am sitting here on the pink couch and you are sitting there on the purple couch. If I was you and you were me.,Where would I be sitting?,Purple,Where would YOU be sitting?,Pink
+I am sitting here on the pink couch and you are sitting there on the purple couch. If I was you and you were me.,Where would YOU be sitting?,Pink,Where would I be sitting?,Purple
+I am sitting here on the pink couch and you are sitting there on the purple couch. If here was there and there was here.,Where would YOU be sitting?,Pink,Where would I be sitting?,Purple
+I am sitting here on the purple couch and you are sitting there on the pink couch. If here was there and there was here.,Where would I be sitting?,Pink,Where would YOU be sitting?,Purple
+I am sitting here on the pink couch and you are sitting there on the purple couch. If here was there and there was here.,Where would I be sitting?,Purple,Where would YOU be sitting?,Pink
+I am sitting here on the purple couch and you are sitting there on the pink couch. If here was there and there was here.,Where would YOU be sitting?,Purple,Where would I be sitting?,Pink
+"Yesterday I was sitting there on the pink couch, today I am sitting here on the purple couch. If here was there and there was here.",Where would I be sitting now?,Pink,Where was I sitting then?,Purple
+"Yesterday I was sitting there on the purple couch, today I am sitting here on the pink couch. If here was there and there was here.",Where was I sitting then?,Pink,Where would I be sitting now?,Purple
+"Yesterday I was sitting there on the pink couch, today I am sitting here on the purple couch. If here was there and there was here.",Where was I sitting then?,Purple,Where would I be sitting now?,Pink
+"Yesterday I was sitting there on the purple couch, today I am sitting here on the pink couch. If here was there and there was here.",Where would I be sitting now?,Purple,Where was I sitting then?,Pink
+"Yesterday you were sitting there on the pink couch, today you are sitting here on the purple couch. If here was there and there was here.",Where would you be sitting now?,Pink,Where were you sitting then?,Purple
+"Yesterday you were sitting there on the pink couch, today you are sitting here on the purple couch. If here was there and there was here.",Where were you sitting then?,Purple,Where would you be sitting now?,Pink
+"Yesterday you were sitting there on the purple couch, today you are sitting here on the pink couch. If here was there and there was here.",Where would you be sitting now?,Purple,Where were you sitting then?,Pink
+"Yesterday you were sitting here on the purple couch, today you are sitting there on the pink couch. If here was there and there was here.",Where were you sitting then?,Pink,Where would you be sitting now?,Purple
+"Yesterday I was playing video games, today I am listening to music. If now was then and then was now.",What was I doing then?,Listening to music,What would I be doing now?,Video games
+"Yesterday I was listening to music, today I am playing video games. If now was then and then was now.",What would I be doing now?,Listening to music,What was I doing then?,Video games
+"Yesterday I was playing video games, today I am listening to music. If now was then and then was now.",What was I doing now?,Video games,What would I be doing then?,Listening to music
+"Yesterday I was listening to music, today I am playing video games. If now was then and then was now.",What was I doing then?,Video games,What would I be doing now?,Listening to music
+"Yesterday you were playing video games, today you are listening to music. If now was then and then was now.",What were you doing then?,Listening to music,What would you be doing now?,Video games
+"Yesterday you were listening to music, today you are playing video games. If now was then and then was now.",What were you doing then?,Video games,What would you be doing now?,Listening to music
+"Yesterday you were playing video games, today you are listening to music. If now was then and then was now.",What would you be doing now?,Video games,What were you doing then?,Listening to music
+"Yesterday you were listening to music, today you are playing video games. If now was then and then was now.",What would you be doing now?,Listening to music,What were you doing then?,Video games
+"Yesterday I was sitting there on the pink couch, today I am sitting here on the purple couch. If now was then and then was now.",Where would I be sitting now?,Pink,Where was I sitting then?,Purple
+"Yesterday I was sitting there on the pink couch, today I am sitting here on the purple couch. If now was then and then was now.",Where was I sitting then?,Purple,Where would I be sitting now?,Pink
+"Yesterday I was sitting there on the purple couch, today I am sitting here on the pink couch. If now was then and then was now.",Where would I be sitting now?,Purple,Where was I sitting then?,Pink
+"Yesterday I was sitting there on the purple couch, today I am sitting here on the pink couch. If now was then and then was now.",Where was I sitting then?,Pink,Where would I be sitting now?,Purple
+"Yesterday you were sitting there on the pink couch, today you are sitting here on the purple couch. If now was then and then was now.",Where were you sitting then?,Purple,Where would you be sitting now?,Pink
+"Yesterday you were sitting there on the pink couch, today you are sitting here on the purple couch. If now was then and then was now.",Where would you be sitting now?,Pink,Where were you sitting hen?,Purple
+"Yesterday you were sitting there on the purple couch, today you are sitting here on the pink couch. If now was then and then was now.",Where were you sitting then?,Pink,Where would you be sitting now?,Purple
+"Yesterday you were sitting there on the purple couch, today you are sitting here on the pink couch. If now was then and then was now.",Where would you be sitting now?,Purple,Where were you sitting then?,Pink
+I am sitting here on the pink couch and you are sitting there on the purple couch. If I was you and you were me and if here was there and there was here.,Where would I be sitting?,Pink,Where would YOU be sitting?,Purple
+I am sitting here on the purple couch and you are sitting there on the pink couch. If I was you and you were me and if here was there and there was here.,Where would I be sitting?,Purple,Where would YOU be sitting?,Pink
+I am sitting here on the pink couch and you are sitting there on the purple couch. If I was you and you were me and if here was there and there was here.,Where YOU be sitting?,Purple,Where would I be sitting?,Pink
+I am sitting here on the purple couch and you are sitting there on the pink couch. If I was you and you were me and if here was there and there was here.,Where would YOU be sitting?,Pink,Where would I be sitting?,Purple
+"Yesterday I was sitting there on the pink couch, today I am sitting here on the purple couch. If here was there and there was here and If now was then and then was now.",Where would I be sitting then?,Pink,Where would I be sitting now?,Purple
+"Yesterday I was sitting there on the pink couch, today I am sitting here on the purple couch. If here was there and there was here and If now was then and then was now.",Where would I be sitting now?,Purple,Where would I be sitting then?,Pink
+"Yesterday I was sitting there on the purple couch, today I am sitting here on the pink couch. If here was there and there was here and If now was then and then was now.",Where would I be sitting then?,Purple,Where would I be sitting now?,Pink
+"Yesterday I was sitting there on the purple couch, today I am sitting here on the pink couch. If here was there and there was here and If now was then and then was now.",Where would I be sitting now?,Pink,Where would I be sitting then?,Purple
+"Yesterday you were sitting there on the pink couch, today you are sitting here on the purple couch. If here was there and there was here and If now was then and then was now.",Where would you be sitting then?,Pink,Where would you be sitting now?,Purple
+"Yesterday you were sitting here on the pink couch, today you are sitting here on the purple couch. If here was there and there was here and If now was then and then was now.",Where would you be sitting now?,Purple,Where would you be sitting then?,Pink
+"Yesterday you were sitting there on the purple couch, today you are sitting here on the pink couch. If here was there and there was here and If now was then and then was now.",Where would you be sitting then?,Purple,Where would you be sitting now?,Pink
+"Yesterday you were sitting there on the purple couch, today you are sitting here on the pink couch. If here was there and there was here and If now was then and then was now.",Where would you be sitting now?,Pink,Where would you be sitting then?,Purple

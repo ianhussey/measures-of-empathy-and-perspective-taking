@@ -1,0 +1,1570 @@
+# To do
+
+- add reverse scoring for the earlier scales
+- IRI reversed items taken from markus' code. need to verify these are correct. 
+- need to add iri subscales
+- add variable for follow up duration
+
+
+# Dependencies
+
+```{r}
+
+library(tidyverse)
+library(psych)
+library(irr)
+library(lme4)
+library(janitor)
+library(knitr)
+library(kableExtra)
+library(semPlot)
+library(GGally)
+
+# options
+options(scipen=999)
+
+```
+
+# Data
+
+## Tidy individual timepoints
+
+```{r}
+
+data_items <- 
+  read_csv("../../data/raw/data_raw_timepoint1_choices.csv", 
+           show_col_types = FALSE) |>
+  janitor::clean_names() |>
+  # select columns of interest
+  select(# session data
+    start_date_t1 = start_date, 
+    duration_in_seconds_t1 = duration_in_seconds, 
+    
+    # demographics
+    age_t1 = age_1, 
+    gender_numeric_t1 = gender, 
+    gender_text_t1 = gender_3_text, 
+    
+    # attention checks
+    attentioncheck_1_t1 = iri_24, 
+    attentioncheck_2_t1 = eq_60, 
+    
+    # single item empathy scale
+    sites_t1 = sites, 
+    
+    # IRI
+    iri_1_t1 = iri_1, 
+    iri_2_t1 = iri_2, 
+    iri_3_t1 = iri_3, 
+    iri_4_t1 = iri_4, 
+    iri_5_t1 = iri_5, 
+    iri_6_t1 = iri_6, 
+    iri_7_t1 = iri_7, 
+    iri_8_t1 = iri_8, 
+    iri_9_t1 = iri_9, 
+    iri_10_t1 = iri_10, 
+    iri_11_t1 = iri_11, 
+    iri_12_t1 = iri_12, 
+    iri_13_t1 = iri_13, 
+    iri_14_t1 = iri_14, 
+    iri_15_t1 = iri_15, 
+    iri_16_t1 = iri_16, 
+    iri_17_t1 = iri_17, 
+    iri_18_t1 = iri_18, 
+    iri_19_t1 = iri_19, 
+    iri_20_t1 = iri_20, 
+    iri_21_t1 = iri_21, 
+    iri_22_t1 = iri_22, 
+    iri_23_t1 = iri_23, 
+    iri_24_t1 = iri_25, 
+    iri_25_t1 = iri_26, 
+    iri_26_t1 = iri_27, 
+    iri_27_t1 = iri_28, 
+    iri_28_t1 = iri_29, 
+    iri_start_t1 = iri_timer_first_click, 
+    iri_end_t1 = iri_timer_last_click, 
+    
+    # EQ
+    eq_1_t1 = eq_1, 
+    eq_2_t1 = eq_2, 
+    eq_3_t1 = eq_3, 
+    eq_4_t1 = eq_4, 
+    eq_5_t1 = eq_5, 
+    eq_6_t1 = eq_6, 
+    eq_7_t1 = eq_7, 
+    eq_8_t1 = eq_8, 
+    eq_9_t1 = eq_9, 
+    eq_10_t1 = eq_10, 
+    eq_11_t1 = eq_11, 
+    eq_12_t1 = eq_12, 
+    eq_13_t1 = eq_13, 
+    eq_14_t1 = eq_14, 
+    eq_15_t1 = eq_15, 
+    eq_16_t1 = eq_16, 
+    eq_17_t1 = eq_17, 
+    eq_18_t1 = eq_18, 
+    eq_19_t1 = eq_19, 
+    eq_20_t1 = eq_20, 
+    eq_21_t1 = eq_21, 
+    eq_22_t1 = eq_22, 
+    eq_23_t1 = eq_23, 
+    eq_24_t1 = eq_24, 
+    eq_25_t1 = eq_25, 
+    eq_26_t1 = eq_26, 
+    eq_27_t1 = eq_27, 
+    eq_28_t1 = eq_28, 
+    eq_29_t1 = eq_29, 
+    eq_30_t1 = eq_30, 
+    eq_31_t1 = eq_31, 
+    eq_32_t1 = eq_32, 
+    eq_33_t1 = eq_33, 
+    eq_34_t1 = eq_34, 
+    eq_35_t1 = eq_35, 
+    eq_36_t1 = eq_36, 
+    eq_37_t1 = eq_37, 
+    eq_38_t1 = eq_38, 
+    eq_39_t1 = eq_39, 
+    eq_40_t1 = eq_40, 
+    eq_41_t1 = eq_41, 
+    eq_42_t1 = eq_42, 
+    eq_43_t1 = eq_43, 
+    eq_44_t1 = eq_44, 
+    eq_45_t1 = eq_45, 
+    eq_46_t1 = eq_46, 
+    eq_47_t1 = eq_47, 
+    eq_48_t1 = eq_48, 
+    eq_49_t1 = eq_49, 
+    eq_50_t1 = eq_50, 
+    eq_51_t1 = eq_51, 
+    eq_52_t1 = eq_52, 
+    eq_53_t1 = eq_53, 
+    eq_54_t1 = eq_54, 
+    eq_55_t1 = eq_55, 
+    eq_56_t1 = eq_56, 
+    eq_57_t1 = eq_57, 
+    eq_58_t1 = eq_58, 
+    eq_59_t1 = eq_59, 
+    eq_60_t1 = eq_61, 
+    eq_start_t1 = eq_timer_first_click, 
+    eq_end_t1 = eq_timer_last_click, 
+    
+    # Pictorial Empathy Test
+    pet_1_t1 = q2, 
+    pet_2_t1 = q4, 
+    pet_3_t1 = q6, 
+    pet_4_t1 = q8, 
+    pet_5_t1 = q10, 
+    pet_6_t1 = q12, 
+    pet_7_t1 = q14, 
+    pet_start_t1 = q3_first_click, 
+    pet_end_t1 = q15_page_submit, 
+    
+    # EYES
+    eyes_1_t1 =  eyes_1, 
+    eyes_2_t1 =  eyes_2, 
+    eyes_3_t1 =  eyes_3,
+    eyes_4_t1 =  eyes_4, 
+    eyes_5_t1 =  eyes_5, 
+    eyes_6_t1 =  eyes_6, 
+    eyes_7_t1 =  eyes_7, 
+    eyes_8_t1 =  eyes_8, 
+    eyes_9_t1 =  eyes_9, 
+    eyes_10_t1 = eyes_10, 
+    eyes_11_t1 = eyes_11, 
+    eyes_12_t1 = eyes_12, 
+    eyes_13_t1 = eyes_13, 
+    eyes_14_t1 = eyes_14, 
+    eyes_15_t1 = eyes_15, 
+    eyes_16_t1 = eyes_16, 
+    eyes_17_t1 = eyes_17, 
+    eyes_18_t1 = eyes_18, 
+    eyes_19_t1 = eyes_19, 
+    eyes_20_t1 = eyes_20, 
+    eyes_21_t1 = eyes_21, 
+    eyes_22_t1 = eyes_22, 
+    eyes_23_t1 = eyes_23, 
+    eyes_24_t1 = eyes_24, 
+    eyes_25_t1 = eyes_25, 
+    eyes_26_t1 = eyes_26, 
+    eyes_27_t1 = eyes_27, 
+    eyes_28_t1 = eyes_28, 
+    eyes_29_t1 = eyes_29, 
+    eyes_30_t1 = eyes_30, 
+    eyes_31_t1 = eyes_31, 
+    eyes_32_t1 = eyes_32, 
+    eyes_33_t1 = eyes_33, 
+    eyes_34_t1 = eyes_34, 
+    eyes_35_t1 = eyes_35, 
+    eyes_36_t1 = eyes_36, 
+    eyes_start_t1 = eyes_0_timer_first_click, 
+    eyes_end_t1 = eyes_36_timer_page_submit, 
+    
+    # PTT
+    ptt_1_t1 = ptt_a_test1, 
+    ptt_2_t1 = ptt_a_test2, 
+    ptt_3_t1 = ptt_a_test3, 
+    ptt_4_t1 = ptt_a_test4, 
+    ptt_5_t1 = ptt_a_test5, 
+    ptt_6_t1 = ptt_a_test6, 
+    ptt_7_t1 = ptt_a_test7, 
+    ptt_8_t1 = ptt_a_test8, 
+    ptt_9_t1 = ptt_a_test9, 
+    ptt_10_t1 = ptt_a_test10, 
+    ptt_11_t1 = ptt_a_test11, 
+    ptt_12_t1 = ptt_a_test12, 
+    ptt_13_t1 = ptt_a_test13, 
+    ptt_14_t1 = ptt_a_test14, 
+    ptt_15_t1 = ptt_a_test15, 
+    ptt_16_t1 = ptt_a_test16, 
+    ptt_17_t1 = ptt_a_test17, 
+    ptt_18_t1 = ptt_a_test18, 
+    ptt_19_t1 = ptt_a_test19, 
+    ptt_20_t1 = ptt_a_test20, 
+    ptt_21_t1 = ptt_a_test21, 
+    ptt_22_t1 = ptt_a_test22, 
+    ptt_23_t1 = ptt_a_test23, 
+    ptt_24_t1 = ptt_a_test24, 
+    ptt_25_t1 = ptt_a_test25, 
+    ptt_26_t1 = ptt_a_test26, 
+    ptt_27_t1 = ptt_a_test27, 
+    ptt_28_t1 = ptt_a_test28, 
+    ptt_29_t1 = ptt_a_test29, 
+    ptt_30_t1 = ptt_a_test30, 
+    ptt_31_t1 = ptt_a_test31, 
+    ptt_32_t1 = ptt_a_test32, 
+    # no timing variables present for ptt
+    
+    # PTP
+    ptp_1_t1 = ptp_1, 
+    ptp_2_t1 = ptp_2, 
+    ptp_3_t1 = ptp_3, 
+    ptp_4_t1 = ptp_4, 
+    ptp_5_t1 = ptp_5, 
+    ptp_6_t1 = ptp_6, 
+    ptp_7_t1 = ptp_7, 
+    ptp_8_t1 = ptp_8, 
+    ptp_9_t1 = ptp_9, 
+    ptp_start_t1 = ptp_timer_first_click, 
+    ptp_end_t1 = ptp_timer_page_submit) |>
+  slice(1:1) |>
+  t() |>
+  as.data.frame() |>
+  rownames_to_column()
+
+
+
+data_t1 <- 
+  read_csv("../../data/raw/data_raw_timepoint1_choices.csv", 
+           show_col_types = FALSE) |>
+  janitor::clean_names() |>
+  # get rid of header rows
+  slice(3:n()) |>
+  # get rid of testing rows
+  filter(distribution_channel != "preview" & 
+           (!str_detect(str_to_lower(gender_3_text), "test") | is.na(gender_3_text))) |>
+  # get rid of people who did not complete due to not giving consent 
+  filter(consent_question == "I Agree") |>
+  # select columns of interest
+  select(prolific_pid, # prolific id
+         
+         # session data
+         start_date_t1 = start_date, 
+         duration_in_seconds_t1 = duration_in_seconds, 
+         
+         # demographics
+         age_t1 = age_1, 
+         gender_numeric_t1 = gender, 
+         gender_text_t1 = gender_3_text, 
+         
+         # attention checks
+         attentioncheck_1_t1 = iri_24, 
+         attentioncheck_2_t1 = eq_60, 
+         
+         # single item empathy scale
+         sites_t1 = sites, 
+         
+         # IRI
+         iri_1_t1 = iri_1, 
+         iri_2_t1 = iri_2, 
+         iri_3_t1 = iri_3, 
+         iri_4_t1 = iri_4, 
+         iri_5_t1 = iri_5, 
+         iri_6_t1 = iri_6, 
+         iri_7_t1 = iri_7, 
+         iri_8_t1 = iri_8, 
+         iri_9_t1 = iri_9, 
+         iri_10_t1 = iri_10, 
+         iri_11_t1 = iri_11, 
+         iri_12_t1 = iri_12, 
+         iri_13_t1 = iri_13, 
+         iri_14_t1 = iri_14, 
+         iri_15_t1 = iri_15, 
+         iri_16_t1 = iri_16, 
+         iri_17_t1 = iri_17, 
+         iri_18_t1 = iri_18, 
+         iri_19_t1 = iri_19, 
+         iri_20_t1 = iri_20, 
+         iri_21_t1 = iri_21, 
+         iri_22_t1 = iri_22, 
+         iri_23_t1 = iri_23, 
+         iri_24_t1 = iri_25, 
+         iri_25_t1 = iri_26, 
+         iri_26_t1 = iri_27, 
+         iri_27_t1 = iri_28, 
+         iri_28_t1 = iri_29, 
+         iri_start_t1 = iri_timer_first_click, 
+         iri_end_t1 = iri_timer_last_click, 
+         
+         # EQ
+         eq_1_t1 = eq_1, 
+         eq_2_t1 = eq_2, 
+         eq_3_t1 = eq_3, 
+         eq_4_t1 = eq_4, 
+         eq_5_t1 = eq_5, 
+         eq_6_t1 = eq_6, 
+         eq_7_t1 = eq_7, 
+         eq_8_t1 = eq_8, 
+         eq_9_t1 = eq_9, 
+         eq_10_t1 = eq_10, 
+         eq_11_t1 = eq_11, 
+         eq_12_t1 = eq_12, 
+         eq_13_t1 = eq_13, 
+         eq_14_t1 = eq_14, 
+         eq_15_t1 = eq_15, 
+         eq_16_t1 = eq_16, 
+         eq_17_t1 = eq_17, 
+         eq_18_t1 = eq_18, 
+         eq_19_t1 = eq_19, 
+         eq_20_t1 = eq_20, 
+         eq_21_t1 = eq_21, 
+         eq_22_t1 = eq_22, 
+         eq_23_t1 = eq_23, 
+         eq_24_t1 = eq_24, 
+         eq_25_t1 = eq_25, 
+         eq_26_t1 = eq_26, 
+         eq_27_t1 = eq_27, 
+         eq_28_t1 = eq_28, 
+         eq_29_t1 = eq_29, 
+         eq_30_t1 = eq_30, 
+         eq_31_t1 = eq_31, 
+         eq_32_t1 = eq_32, 
+         eq_33_t1 = eq_33, 
+         eq_34_t1 = eq_34, 
+         eq_35_t1 = eq_35, 
+         eq_36_t1 = eq_36, 
+         eq_37_t1 = eq_37, 
+         eq_38_t1 = eq_38, 
+         eq_39_t1 = eq_39, 
+         eq_40_t1 = eq_40, 
+         eq_41_t1 = eq_41, 
+         eq_42_t1 = eq_42, 
+         eq_43_t1 = eq_43, 
+         eq_44_t1 = eq_44, 
+         eq_45_t1 = eq_45, 
+         eq_46_t1 = eq_46, 
+         eq_47_t1 = eq_47, 
+         eq_48_t1 = eq_48, 
+         eq_49_t1 = eq_49, 
+         eq_50_t1 = eq_50, 
+         eq_51_t1 = eq_51, 
+         eq_52_t1 = eq_52, 
+         eq_53_t1 = eq_53, 
+         eq_54_t1 = eq_54, 
+         eq_55_t1 = eq_55, 
+         eq_56_t1 = eq_56, 
+         eq_57_t1 = eq_57, 
+         eq_58_t1 = eq_58, 
+         eq_59_t1 = eq_59, 
+         eq_60_t1 = eq_61, 
+         eq_start_t1 = eq_timer_first_click, 
+         eq_end_t1 = eq_timer_last_click, 
+         
+         # Pictorial Empathy Test
+         pet_1_t1 = q2, 
+         pet_2_t1 = q4, 
+         pet_3_t1 = q6, 
+         pet_4_t1 = q8, 
+         pet_5_t1 = q10, 
+         pet_6_t1 = q12, 
+         pet_7_t1 = q14, 
+         pet_start_t1 = q3_first_click, 
+         pet_end_t1 = q15_page_submit, 
+         
+         # EYES
+         eyes_1_t1 =  eyes_1, 
+         eyes_2_t1 =  eyes_2, 
+         eyes_3_t1 =  eyes_3,
+         eyes_4_t1 =  eyes_4, 
+         eyes_5_t1 =  eyes_5, 
+         eyes_6_t1 =  eyes_6, 
+         eyes_7_t1 =  eyes_7, 
+         eyes_8_t1 =  eyes_8, 
+         eyes_9_t1 =  eyes_9, 
+         eyes_10_t1 = eyes_10, 
+         eyes_11_t1 = eyes_11, 
+         eyes_12_t1 = eyes_12, 
+         eyes_13_t1 = eyes_13, 
+         eyes_14_t1 = eyes_14, 
+         eyes_15_t1 = eyes_15, 
+         eyes_16_t1 = eyes_16, 
+         eyes_17_t1 = eyes_17, 
+         eyes_18_t1 = eyes_18, 
+         eyes_19_t1 = eyes_19, 
+         eyes_20_t1 = eyes_20, 
+         eyes_21_t1 = eyes_21, 
+         eyes_22_t1 = eyes_22, 
+         eyes_23_t1 = eyes_23, 
+         eyes_24_t1 = eyes_24, 
+         eyes_25_t1 = eyes_25, 
+         eyes_26_t1 = eyes_26, 
+         eyes_27_t1 = eyes_27, 
+         eyes_28_t1 = eyes_28, 
+         eyes_29_t1 = eyes_29, 
+         eyes_30_t1 = eyes_30, 
+         eyes_31_t1 = eyes_31, 
+         eyes_32_t1 = eyes_32, 
+         eyes_33_t1 = eyes_33, 
+         eyes_34_t1 = eyes_34, 
+         eyes_35_t1 = eyes_35, 
+         eyes_36_t1 = eyes_36, 
+         eyes_start_t1 = eyes_0_timer_first_click, 
+         eyes_end_t1 = eyes_36_timer_page_submit, 
+         
+         # PTT
+         ptt_1_t1 = ptt_a_test1, 
+         ptt_2_t1 = ptt_a_test2, 
+         ptt_3_t1 = ptt_a_test3, 
+         ptt_4_t1 = ptt_a_test4, 
+         ptt_5_t1 = ptt_a_test5, 
+         ptt_6_t1 = ptt_a_test6, 
+         ptt_7_t1 = ptt_a_test7, 
+         ptt_8_t1 = ptt_a_test8, 
+         ptt_9_t1 = ptt_a_test9, 
+         ptt_10_t1 = ptt_a_test10, 
+         ptt_11_t1 = ptt_a_test11, 
+         ptt_12_t1 = ptt_a_test12, 
+         ptt_13_t1 = ptt_a_test13, 
+         ptt_14_t1 = ptt_a_test14, 
+         ptt_15_t1 = ptt_a_test15, 
+         ptt_16_t1 = ptt_a_test16, 
+         ptt_17_t1 = ptt_a_test17, 
+         ptt_18_t1 = ptt_a_test18, 
+         ptt_19_t1 = ptt_a_test19, 
+         ptt_20_t1 = ptt_a_test20, 
+         ptt_21_t1 = ptt_a_test21, 
+         ptt_22_t1 = ptt_a_test22, 
+         ptt_23_t1 = ptt_a_test23, 
+         ptt_24_t1 = ptt_a_test24, 
+         ptt_25_t1 = ptt_a_test25, 
+         ptt_26_t1 = ptt_a_test26, 
+         ptt_27_t1 = ptt_a_test27, 
+         ptt_28_t1 = ptt_a_test28, 
+         ptt_29_t1 = ptt_a_test29, 
+         ptt_30_t1 = ptt_a_test30, 
+         ptt_31_t1 = ptt_a_test31, 
+         ptt_32_t1 = ptt_a_test32, 
+         # no timing variables present for ptt
+         
+         # PTP
+         ptp_1_t1 = ptp_1, 
+         ptp_2_t1 = ptp_2, 
+         ptp_3_t1 = ptp_3, 
+         ptp_4_t1 = ptp_4, 
+         ptp_5_t1 = ptp_5, 
+         ptp_6_t1 = ptp_6, 
+         ptp_7_t1 = ptp_7, 
+         ptp_8_t1 = ptp_8, 
+         ptp_9_t1 = ptp_9, 
+         ptp_start_t1 = ptp_timer_first_click, 
+         ptp_end_t1 = ptp_timer_page_submit)
+
+
+data_t2 <- 
+  read_csv("../../data/raw/data_raw_timepoint2_choices.csv", 
+           show_col_types = FALSE) |>
+  janitor::clean_names() |>
+  # get rid of header rows
+  slice(3:n()) |>
+  # get rid of testing rows
+  filter(distribution_channel != "preview" & 
+           (!str_detect(str_to_lower(gender_3_text), "test") | is.na(gender_3_text))) |>
+  # get rid of people who did not complete due to not giving consent 
+  filter(consent_question == "I Agree") |>
+  # select columns of interest
+  select(prolific_pid, # prolific id
+         
+         # session data
+         start_date_t2 = start_date, 
+         duration_in_seconds_t2 = duration_in_seconds, 
+         
+         # demographics
+         age_t2 = age_1, 
+         gender_numeric_t2 = gender, 
+         gender_text_t2 = gender_3_text, 
+         
+         # attention checks
+         attentioncheck_1_t2 = iri_24, 
+         attentioncheck_2_t2 = eq_60, 
+         
+         # single item empathy scale
+         sites_t2 = sites, 
+         
+         # IRI
+         iri_1_t2 = iri_1, 
+         iri_2_t2 = iri_2, 
+         iri_3_t2 = iri_3, 
+         iri_4_t2 = iri_4, 
+         iri_5_t2 = iri_5, 
+         iri_6_t2 = iri_6, 
+         iri_7_t2 = iri_7, 
+         iri_8_t2 = iri_8, 
+         iri_9_t2 = iri_9, 
+         iri_10_t2 = iri_10, 
+         iri_11_t2 = iri_11, 
+         iri_12_t2 = iri_12, 
+         iri_13_t2 = iri_13, 
+         iri_14_t2 = iri_14, 
+         iri_15_t2 = iri_15, 
+         iri_16_t2 = iri_16, 
+         iri_17_t2 = iri_17, 
+         iri_18_t2 = iri_18, 
+         iri_19_t2 = iri_19, 
+         iri_20_t2 = iri_20, 
+         iri_21_t2 = iri_21, 
+         iri_22_t2 = iri_22, 
+         iri_23_t2 = iri_23, 
+         iri_24_t2 = iri_25, 
+         iri_25_t2 = iri_26, 
+         iri_26_t2 = iri_27, 
+         iri_27_t2 = iri_28, 
+         iri_28_t2 = iri_29, 
+         iri_start_t2 = iri_timer_first_click, 
+         iri_end_t2 = iri_timer_last_click,
+         
+         # EQ
+         eq_1_t2 = eq_1, 
+         eq_2_t2 = eq_2, 
+         eq_3_t2 = eq_3, 
+         eq_4_t2 = eq_4, 
+         eq_5_t2 = eq_5, 
+         eq_6_t2 = eq_6, 
+         eq_7_t2 = eq_7, 
+         eq_8_t2 = eq_8, 
+         eq_9_t2 = eq_9, 
+         eq_10_t2 = eq_10, 
+         eq_11_t2 = eq_11, 
+         eq_12_t2 = eq_12, 
+         eq_13_t2 = eq_13, 
+         eq_14_t2 = eq_14, 
+         eq_15_t2 = eq_15, 
+         eq_16_t2 = eq_16, 
+         eq_17_t2 = eq_17, 
+         eq_18_t2 = eq_18, 
+         eq_19_t2 = eq_19, 
+         eq_20_t2 = eq_20, 
+         eq_21_t2 = eq_21, 
+         eq_22_t2 = eq_22, 
+         eq_23_t2 = eq_23, 
+         eq_24_t2 = eq_24, 
+         eq_25_t2 = eq_25, 
+         eq_26_t2 = eq_26, 
+         eq_27_t2 = eq_27, 
+         eq_28_t2 = eq_28, 
+         eq_29_t2 = eq_29, 
+         eq_30_t2 = eq_30, 
+         eq_31_t2 = eq_31, 
+         eq_32_t2 = eq_32, 
+         eq_33_t2 = eq_33, 
+         eq_34_t2 = eq_34, 
+         eq_35_t2 = eq_35, 
+         eq_36_t2 = eq_36, 
+         eq_37_t2 = eq_37, 
+         eq_38_t2 = eq_38, 
+         eq_39_t2 = eq_39, 
+         eq_40_t2 = eq_40, 
+         eq_41_t2 = eq_41, 
+         eq_42_t2 = eq_42, 
+         eq_43_t2 = eq_43, 
+         eq_44_t2 = eq_44, 
+         eq_45_t2 = eq_45, 
+         eq_46_t2 = eq_46, 
+         eq_47_t2 = eq_47, 
+         eq_48_t2 = eq_48, 
+         eq_49_t2 = eq_49, 
+         eq_50_t2 = eq_50, 
+         eq_51_t2 = eq_51, 
+         eq_52_t2 = eq_52, 
+         eq_53_t2 = eq_53, 
+         eq_54_t2 = eq_54, 
+         eq_55_t2 = eq_55, 
+         eq_56_t2 = eq_56, 
+         eq_57_t2 = eq_57, 
+         eq_58_t2 = eq_58, 
+         eq_59_t2 = eq_59, 
+         eq_60_t2 = eq_61, 
+         eq_start_t2 = eq_timer_first_click, 
+         eq_end_t2 = eq_timer_last_click, 
+         
+         # Pictorial Empathy Test
+         pet_1_t2 = q2, 
+         pet_2_t2 = q4, 
+         pet_3_t2 = q6, 
+         pet_4_t2 = q8, 
+         pet_5_t2 = q10, 
+         pet_6_t2 = q12, 
+         pet_7_t2 = q14, 
+         pet_start_t2 = q3_first_click, 
+         pet_end_t2 = q15_page_submit, 
+         
+         # EYES
+         eyes_1_t2 =  eyes_1, 
+         eyes_2_t2 =  eyes_2, 
+         eyes_3_t2 =  eyes_3,
+         eyes_4_t2 =  eyes_4, 
+         eyes_5_t2 =  eyes_5, 
+         eyes_6_t2 =  eyes_6, 
+         eyes_7_t2 =  eyes_7, 
+         eyes_8_t2 =  eyes_8, 
+         eyes_9_t2 =  eyes_9, 
+         eyes_10_t2 = eyes_10, 
+         eyes_11_t2 = eyes_11, 
+         eyes_12_t2 = eyes_12, 
+         eyes_13_t2 = eyes_13, 
+         eyes_14_t2 = eyes_14, 
+         eyes_15_t2 = eyes_15, 
+         eyes_16_t2 = eyes_16, 
+         eyes_17_t2 = eyes_17, 
+         eyes_18_t2 = eyes_18, 
+         eyes_19_t2 = eyes_19, 
+         eyes_20_t2 = eyes_20, 
+         eyes_21_t2 = eyes_21, 
+         eyes_22_t2 = eyes_22, 
+         eyes_23_t2 = eyes_23, 
+         eyes_24_t2 = eyes_24, 
+         eyes_25_t2 = eyes_25, 
+         eyes_26_t2 = eyes_26, 
+         eyes_27_t2 = eyes_27, 
+         eyes_28_t2 = eyes_28, 
+         eyes_29_t2 = eyes_29, 
+         eyes_30_t2 = eyes_30, 
+         eyes_31_t2 = eyes_31, 
+         eyes_32_t2 = eyes_32, 
+         eyes_33_t2 = eyes_33, 
+         eyes_34_t2 = eyes_34, 
+         eyes_35_t2 = eyes_35, 
+         eyes_36_t2 = eyes_36, 
+         eyes_start_t2 = eyes_0_timer_first_click, 
+         eyes_end_t2 = eyes_36_timer_page_submit, 
+         
+         # PTT
+         ptt_1_t2 = ptt_a_test1, 
+         ptt_2_t2 = ptt_a_test2, 
+         ptt_3_t2 = ptt_a_test3, 
+         ptt_4_t2 = ptt_a_test4, 
+         ptt_5_t2 = ptt_a_test5, 
+         ptt_6_t2 = ptt_a_test6, 
+         ptt_7_t2 = ptt_a_test7, 
+         ptt_8_t2 = ptt_a_test8, 
+         ptt_9_t2 = ptt_a_test9, 
+         ptt_10_t2 = ptt_a_test10, 
+         ptt_11_t2 = ptt_a_test11, 
+         ptt_12_t2 = ptt_a_test12, 
+         ptt_13_t2 = ptt_a_test13, 
+         ptt_14_t2 = ptt_a_test14, 
+         ptt_15_t2 = ptt_a_test15, 
+         ptt_16_t2 = ptt_a_test16, 
+         ptt_17_t2 = ptt_a_test17, 
+         ptt_18_t2 = ptt_a_test18, 
+         ptt_19_t2 = ptt_a_test19, 
+         ptt_20_t2 = ptt_a_test20, 
+         ptt_21_t2 = ptt_a_test21, 
+         ptt_22_t2 = ptt_a_test22, 
+         ptt_23_t2 = ptt_a_test23, 
+         ptt_24_t2 = ptt_a_test24, 
+         ptt_25_t2 = ptt_a_test25, 
+         ptt_26_t2 = ptt_a_test26, 
+         ptt_27_t2 = ptt_a_test27, 
+         ptt_28_t2 = ptt_a_test28, 
+         ptt_29_t2 = ptt_a_test29, 
+         ptt_30_t2 = ptt_a_test30, 
+         ptt_31_t2 = ptt_a_test31, 
+         ptt_32_t2 = ptt_a_test32, 
+         # no timing variables present for ptt
+         
+         # PTP
+         ptp_1_t2 = ptp_1, 
+         ptp_2_t2 = ptp_2, 
+         ptp_3_t2 = ptp_3, 
+         ptp_4_t2 = ptp_4, 
+         ptp_5_t2 = ptp_5, 
+         ptp_6_t2 = ptp_6, 
+         ptp_7_t2 = ptp_7, 
+         ptp_8_t2 = ptp_8, 
+         ptp_9_t2 = ptp_9, 
+         ptp_start_t2 = ptp_timer_first_click, 
+         ptp_end_t2 = ptp_timer_page_submit)
+
+```
+
+## Combine
+
+```{r}
+
+data_combined <- 
+  full_join(data_t1,
+            data_t2,
+            by = "prolific_pid") |>
+  # create anonymous unique id
+  rownames_to_column(var = "id") |>
+  # drop prolific id and select other variables of interest
+  select(
+    id, 
+    
+    # session data
+    start_date_t1, 
+    start_date_t2,
+    
+    # demographics
+    age_t1, 
+    age_t2, 
+    gender_numeric_t1, 
+    gender_numeric_t2, 
+    gender_text_t1, 
+    gender_text_t2, 
+    
+    # attention checks
+    attentioncheck_1_t1, # should be "C"
+    attentioncheck_2_t1, # should be "Agree Strongly"
+    attentioncheck_1_t2, # should be "C"
+    attentioncheck_2_t2, # should be "Agree Strongly"
+    
+    # single item empathy scale
+    sites_t1, 
+    sites_t2, 
+    
+    # IRI
+    iri_1_t1, iri_2_t1, iri_3_t1, iri_4_t1, iri_5_t1, iri_6_t1, iri_7_t1, iri_8_t1, iri_9_t1, iri_10_t1, iri_11_t1, iri_12_t1, iri_13_t1, iri_14_t1, iri_15_t1, iri_16_t1, iri_17_t1, iri_18_t1, iri_19_t1, iri_20_t1, iri_21_t1, iri_22_t1, iri_23_t1, iri_24_t1, iri_25_t1, iri_26_t1, iri_27_t1, iri_28_t1, 
+    iri_1_t2, iri_2_t2, iri_3_t2, iri_4_t2, iri_5_t2, iri_6_t2, iri_7_t2, iri_8_t2, iri_9_t2, iri_10_t2, iri_11_t2, iri_12_t2, iri_13_t2, iri_14_t2, iri_15_t2, iri_16_t2, iri_17_t2, iri_18_t2, iri_19_t2, iri_20_t2, iri_21_t2, iri_22_t2, iri_23_t2, iri_24_t2, iri_25_t2, iri_26_t2, iri_27_t2, iri_28_t2, 
+    
+    # EQ - filler items dropped
+    eq_1_t1, eq_4_t1, eq_6_t1, eq_8_t1, eq_10_t1, eq_11_t1, eq_12_t1, eq_14_t1, eq_15_t1, eq_18_t1, eq_19_t1, eq_21_t1, eq_22_t1, eq_25_t1, eq_26_t1, eq_27_t1, eq_28_t1, eq_29_t1, eq_32_t1, eq_34_t1, eq_35_t1, eq_36_t1, eq_37_t1, eq_38_t1, eq_39_t1, eq_41_t1, eq_42_t1, eq_43_t1, eq_44_t1, eq_46_t1, eq_48_t1, eq_49_t1, eq_50_t1, eq_52_t1, eq_54_t1, eq_55_t1, eq_57_t1, eq_58_t1, eq_59_t1, eq_60_t1, 
+    eq_1_t2, eq_4_t2, eq_6_t2, eq_8_t2, eq_10_t2, eq_11_t2, eq_12_t2, eq_14_t2, eq_15_t2, eq_18_t2, eq_19_t2, eq_21_t2, eq_22_t2, eq_25_t2, eq_26_t2, eq_27_t2, eq_28_t2, eq_29_t2, eq_32_t2, eq_34_t2, eq_35_t2, eq_36_t2, eq_37_t2, eq_38_t2, eq_39_t2, eq_41_t2, eq_42_t2, eq_43_t2, eq_44_t2, eq_46_t2, eq_48_t2, eq_49_t2, eq_50_t2, eq_52_t2, eq_54_t2, eq_55_t2, eq_57_t2, eq_58_t2, eq_59_t2, eq_60_t2, 
+    
+    # Pictorial Empathy Test
+    pet_1_t1, pet_2_t1, pet_3_t1, pet_4_t1, pet_5_t1, pet_6_t1, pet_7_t1, 
+    pet_1_t2, pet_2_t2, pet_3_t2, pet_4_t2, pet_5_t2, pet_6_t2, pet_7_t2, 
+    
+    # EYES
+    eyes_1_t1, eyes_2_t1, eyes_3_t1, eyes_4_t1, eyes_5_t1, eyes_6_t1, eyes_7_t1, eyes_8_t1, eyes_9_t1, eyes_10_t1, eyes_11_t1, eyes_12_t1, eyes_13_t1, eyes_14_t1, eyes_15_t1, eyes_16_t1, eyes_17_t1, eyes_18_t1, eyes_19_t1, eyes_20_t1, eyes_21_t1, eyes_22_t1, eyes_23_t1, eyes_24_t1, eyes_25_t1, eyes_26_t1, eyes_27_t1, eyes_28_t1, eyes_29_t1, eyes_30_t1, eyes_31_t1, eyes_32_t1, eyes_33_t1, eyes_34_t1, eyes_35_t1, eyes_36_t1, 
+    eyes_1_t2, eyes_2_t2, eyes_3_t2, eyes_4_t2, eyes_5_t2, eyes_6_t2, eyes_7_t2, eyes_8_t2, eyes_9_t2, eyes_10_t2, eyes_11_t2, eyes_12_t2, eyes_13_t2, eyes_14_t2, eyes_15_t2, eyes_16_t2, eyes_17_t2, eyes_18_t2, eyes_19_t2, eyes_20_t2, eyes_21_t2, eyes_22_t2, eyes_23_t2, eyes_24_t2, eyes_25_t2, eyes_26_t2, eyes_27_t2, eyes_28_t2, eyes_29_t2, eyes_30_t2, eyes_31_t2, eyes_32_t2, eyes_33_t2, eyes_34_t2, eyes_35_t2, eyes_36_t2, 
+    
+    # PTT
+    ptt_1_t1, ptt_2_t1, ptt_3_t1, ptt_4_t1, ptt_5_t1, ptt_6_t1, ptt_7_t1, ptt_8_t1, ptt_9_t1, ptt_10_t1, ptt_11_t1, ptt_12_t1, ptt_13_t1, ptt_14_t1, ptt_15_t1, ptt_16_t1, ptt_17_t1, ptt_18_t1, ptt_19_t1, ptt_20_t1, ptt_21_t1, ptt_22_t1, ptt_23_t1, ptt_24_t1, ptt_25_t1, ptt_26_t1, ptt_27_t1, ptt_28_t1, ptt_29_t1, ptt_30_t1, ptt_31_t1, ptt_32_t1, 
+    
+    ptt_1_t2, ptt_2_t2, ptt_3_t2, ptt_4_t2, ptt_5_t2, ptt_6_t2, ptt_7_t2, ptt_8_t2, ptt_9_t2, ptt_10_t2, ptt_11_t2, ptt_12_t2, ptt_13_t2, ptt_14_t2, ptt_15_t2, ptt_16_t2, ptt_17_t2, ptt_18_t2, ptt_19_t2, ptt_20_t2, ptt_21_t2, ptt_22_t2, ptt_23_t2, ptt_24_t2, ptt_25_t2, ptt_26_t2, ptt_27_t2, ptt_28_t2, ptt_29_t2, ptt_30_t2, ptt_31_t2, ptt_32_t2, 
+    
+    # PTP
+    ptp_1_t1, ptp_2_t1, ptp_3_t1, ptp_4_t1, ptp_5_t1, ptp_6_t1, ptp_7_t1, ptp_8_t1, ptp_9_t1, 
+    ptp_1_t2, ptp_2_t2, ptp_3_t2, ptp_4_t2, ptp_5_t2, ptp_6_t2, ptp_7_t2, ptp_8_t2, ptp_9_t2, 
+    
+    # # timing
+    # duration_in_seconds_t1, 
+    # duration_in_seconds_t2, 
+    # 
+    # iri_start_t1, iri_end_t1, 
+    # iri_start_t2, iri_end_t2, 
+    # 
+    # eq_start_t1, eq_end_t1, 
+    # eq_start_t2, eq_end_t2, 
+    # 
+    # pet_start_t1, pet_end_t1, 
+    # pet_start_t2, pet_end_t2, 
+    # 
+    # eyes_start_t1, eyes_end_t1, 
+    # eyes_start_t2, eyes_end_t2, 
+    # 
+    # ptp_start_t1, ptp_end_t1,
+    # ptp_start_t2, ptp_end_t2
+  )
+
+dir.create("../../data/processed")
+write_csv(data_combined, "../../data/processed/data_semiraw_rehaped_and_anonymised.csv")
+write_csv(data_items, "../../data/processed/data_semiraw_rehaped_and_anonymised_codebook.csv")
+
+```
+
+# Recoding strings to numerics and reverse scoring
+
+```{r}
+
+data_recoded <- data_combined |>
+  mutate(
+    # recode attention checks
+    across(starts_with("attentioncheck_1") & !contains("start") & !contains("end"), 
+           ~ recode(.x, 
+                    'C' = "passed",
+                    .default = "failed")),
+    across(starts_with("attentioncheck_2") & !contains("start") & !contains("end"), 
+           ~ recode(.x, 
+                    'strongly agree' = "passed",
+                    .default = "failed")),
+    
+    # recode SITES 
+    across(starts_with("sites") & !contains("start") & !contains("end"), 
+           ~ recode(.x, 
+                    '1 Not very true of me' = 1,
+                    '2' = 2,
+                    '3' = 3,
+                    '4' = 4,
+                    '5 Very true of me.' = 5, 
+                    .default = -10)),
+    
+    # recode IRI
+    across(starts_with("iri") & !contains("start") & !contains("end"), 
+           ~ recode(.x, 
+                    'A - DOES NOT DESCRIBE ME VERY WELL' = 0, 
+                    'B' = 1,
+                    'C' = 2,
+                    'D' = 3,
+                    'E - DESCRIBES ME VERY WELL' = 4,
+                    .default = -10)),
+    # reverse score IRI
+    across(c(iri_3_t1, iri_4_t1, iri_7_t1, iri_12_t1, iri_13_t1, iri_14_t1, iri_15_t1, iri_18_t1, iri_19_t1,
+             iri_3_t2, iri_4_t2, iri_7_t2, iri_12_t2, iri_13_t2, iri_14_t2, iri_15_t2, iri_18_t2, iri_19_t2), 
+           ~ 4 - .x),
+    
+    # recode and reverse score EQ
+    across(c(eq_1_t1, eq_6_t1, eq_19_t1, eq_22_t1, eq_25_t1, eq_26_t1, eq_35_t1, eq_36_t1, eq_37_t1, eq_38_t1, eq_41_t1, eq_42_t1, eq_43_t1, eq_44_t1, eq_52_t1, eq_54_t1, eq_55_t1, eq_57_t1, eq_58_t1, eq_59_t1, eq_60_t1, eq_1_t2, eq_6_t2, eq_19_t2, eq_22_t2, eq_25_t2, eq_26_t2, eq_35_t2, eq_36_t2, eq_37_t2, eq_38_t2, eq_41_t2, eq_42_t2, eq_43_t2, eq_44_t2, eq_52_t2, eq_54_t2, eq_55_t2, eq_57_t2, eq_58_t2, eq_59_t2, eq_60_t2), 
+           ~ recode(.x,
+                    'strongly agree' = 2,
+                    'slightly agree' = 1,
+                    'slightly disagree' = 0,
+                    'strongly disagree' = 0,
+                    .default = -10)),
+    across(c(eq_4_t1, eq_8_t1, eq_10_t1, eq_11_t1, eq_12_t1, eq_14_t1, eq_15_t1, eq_18_t1, eq_21_t1, eq_27_t1, eq_28_t1, eq_29_t1, eq_32_t1, eq_34_t1, eq_39_t1, eq_46_t1, eq_48_t1, eq_49_t1, eq_50_t1, eq_4_t2, eq_8_t2, eq_10_t2, eq_11_t2, eq_12_t2, eq_14_t2, eq_15_t2, eq_18_t2, eq_21_t2, eq_27_t2, eq_28_t2, eq_29_t2, eq_32_t2, eq_34_t2, eq_39_t2, eq_46_t2, eq_48_t2, eq_49_t2, eq_50_t2), 
+           ~ recode(.x,
+                    'strongly agree' = 0,
+                    'slightly agree' = 0,
+                    'slightly disagree' = 1,
+                    'strongly disagree' = 2,
+                    .default = -10)),
+    
+    # recode PET
+    across(starts_with("pet") & !contains("start") & !contains("end"), 
+           ~ recode(.x, 
+                    'not at all' = 1,
+                    'a little bit' = 2, 
+                    'it arouses some feelings' = 3, 
+                    'quite a lot' = 4, 
+                    'very much' = 5, 
+                    .default = -10)),
+    
+    # recode EYES
+    across(starts_with("eyes_1_") & !contains("start") & !contains("end"), 
+           ~ recode(.x, 'playful' = 1, .default = 0)),
+    across(starts_with("eyes_2_") & !contains("start") & !contains("end"), 
+           ~ recode(.x, 'upset' = 1, .default = 0)),
+    across(starts_with("eyes_3_") & !contains("start") & !contains("end"), 
+           ~ recode(.x, 'desire' = 1, .default = 0)),
+    across(starts_with("eyes_4_") & !contains("start") & !contains("end"), 
+           ~ recode(.x, 'insisting' = 1, .default = 0)),
+    across(starts_with("eyes_5_") & !contains("start") & !contains("end"), 
+           ~ recode(.x, 'worried' = 1, .default = 0)),
+    across(starts_with("eyes_6_") & !contains("start") & !contains("end"), 
+           ~ recode(.x, 'fantasizing' = 1, .default = 0)),
+    across(starts_with("eyes_7_") & !contains("start") & !contains("end"), 
+           ~ recode(.x, 'uneasy' = 1, .default = 0)),
+    across(starts_with("eyes_8_") & !contains("start") & !contains("end"), 
+           ~ recode(.x, 'despondent' = 1, .default = 0)),
+    across(starts_with("eyes_9_") & !contains("start") & !contains("end"), 
+           ~ recode(.x, 'preoccupied' = 1, .default = 0)),
+    across(starts_with("eyes_10_") & !contains("start") & !contains("end"), 
+           ~ recode(.x, 'cautious' = 1, .default = 0)),
+    across(starts_with("eyes_11_") & !contains("start") & !contains("end"), 
+           ~ recode(.x, 'regretful' = 1, .default = 0)),
+    across(starts_with("eyes_12_") & !contains("start") & !contains("end"), 
+           ~ recode(.x, 'sceptical' = 1, .default = 0)),
+    across(starts_with("eyes_13_") & !contains("start") & !contains("end"), 
+           ~ recode(.x, 'anticipating' = 1, .default = 0)),
+    across(starts_with("eyes_14_") & !contains("start") & !contains("end"), 
+           ~ recode(.x, 'accusing' = 1, .default = 0)), 
+    across(starts_with("eyes_15_") & !contains("start") & !contains("end"), 
+           ~ recode(.x, 'contemplative' = 1, .default = 0)),
+    across(starts_with("eyes_16_") & !contains("start") & !contains("end"), 
+           ~ recode(.x, 'thoughtful' = 1, .default = 0)),
+    across(starts_with("eyes_17_") & !contains("start") & !contains("end"), 
+           ~ recode(.x, 'doubtful' = 1, .default = 0)),
+    across(starts_with("eyes_18_") & !contains("start") & !contains("end"), 
+           ~ recode(.x, 'decisive' = 1, .default = 0)),
+    across(starts_with("eyes_19_") & !contains("start") & !contains("end"), 
+           ~ recode(.x, 'tentative' = 1, .default = 0)),
+    across(starts_with("eyes_20_") & !contains("start") & !contains("end"), 
+           ~ recode(.x, 'friendly' = 1, .default = 0)),
+    across(starts_with("eyes_21_") & !contains("start") & !contains("end"), 
+           ~ recode(.x, 'fantasizing' = 1, .default = 0)),
+    across(starts_with("eyes_22_") & !contains("start") & !contains("end"), 
+           ~ recode(.x, 'preoccupied' = 1, .default = 0)),
+    across(starts_with("eyes_23_") & !contains("start") & !contains("end"), 
+           ~ recode(.x, 'defiant' = 1, .default = 0)),
+    across(starts_with("eyes_24_") & !contains("start") & !contains("end"), 
+           ~ recode(.x, 'pensive' = 1, .default = 0)),
+    across(starts_with("eyes_25_") & !contains("start") & !contains("end"), 
+           ~ recode(.x, 'interested' = 1, .default = 0)),
+    across(starts_with("eyes_26_") & !contains("start") & !contains("end"), 
+           ~ recode(.x, 'hostile' = 1, .default = 0)),
+    across(starts_with("eyes_27_") & !contains("start") & !contains("end"), 
+           ~ recode(.x, 'cautious' = 1, .default = 0)),
+    across(starts_with("eyes_28_") & !contains("start") & !contains("end"), 
+           ~ recode(.x, 'interested' = 1, .default = 0)),
+    across(starts_with("eyes_29_") & !contains("start") & !contains("end"), 
+           ~ recode(.x, 'reflective' = 1, .default = 0)),
+    across(starts_with("eyes_30_") & !contains("start") & !contains("end"), 
+           ~ recode(.x, 'flirtatious' = 1, .default = 0)),
+    across(starts_with("eyes_31_") & !contains("start") & !contains("end"), 
+           ~ recode(.x, 'confident' = 1, .default = 0)),
+    across(starts_with("eyes_32_") & !contains("start") & !contains("end"), 
+           ~ recode(.x, 'serious' = 1, .default = 0)),
+    across(starts_with("eyes_33_") & !contains("start") & !contains("end"), 
+           ~ recode(.x, 'concerned' = 1, .default = 0)),
+    across(starts_with("eyes_34_") & !contains("start") & !contains("end"), 
+           ~ recode(.x, 'distrustful' = 1,.default = 0)),
+    across(starts_with("eyes_35_") & !contains("start") & !contains("end"), 
+           ~ recode(.x, 'nervous' = 1, .default = 0)),
+    across(starts_with("eyes_36_") & !contains("start") & !contains("end"), 
+           ~ recode(.x, 'suspicious' = 1, .default = 0)),
+    
+    # recode spatial PTT-A
+    across(starts_with("ptt_") & !contains("start") & !contains("end"),
+           ~ str_remove(.x, "Picture ")),
+    
+    across(starts_with("ptt_1_") & !contains("start") & !contains("end"),  
+           ~ recode(.x, '6' = 1, .default = 0)),
+    across(starts_with("ptt_2_") & !contains("start") & !contains("end"),   
+           ~ recode(.x, '4' = 1, .default = 0)),
+    across(starts_with("ptt_3_") & !contains("start") & !contains("end"),  # "attention check"
+           ~ recode(.x, '1' = 1, .default = 0)),
+    across(starts_with("ptt_4_") & !contains("start") & !contains("end"),  
+           ~ recode(.x, '8' = 1, .default = 0)),
+    across(starts_with("ptt_5_") & !contains("start") & !contains("end"),  
+           ~ recode(.x, '3' = 1, .default = 0)),
+    across(starts_with("ptt_6_") & !contains("start") & !contains("end"),  
+           ~ recode(.x, '2' = 1, .default = 0)),
+    across(starts_with("ptt_7_") & !contains("start") & !contains("end"),  
+           ~ recode(.x, '7' = 1, .default = 0)),
+    across(starts_with("ptt_8_") & !contains("start") & !contains("end"),  
+           ~ recode(.x, '3' = 1, .default = 0)),
+    across(starts_with("ptt_9_") & !contains("start") & !contains("end"),  
+           ~ recode(.x, '1' = 1, .default = 0)),
+    across(starts_with("ptt_10_") & !contains("start") & !contains("end"), 
+           ~ recode(.x, '2' = 1, .default = 0)),
+    across(starts_with("ptt_11_") & !contains("start") & !contains("end"), 
+           ~ recode(.x, '7' = 1, .default = 0)),
+    across(starts_with("ptt_12_") & !contains("start") & !contains("end"), 
+           ~ recode(.x, '8' = 1, .default = 0)),
+    across(starts_with("ptt_13_") & !contains("start") & !contains("end"),  # "attention check"
+           ~ recode(.x, '5' = 1, .default = 0)),
+    across(starts_with("ptt_14_") & !contains("start") & !contains("end"), 
+           ~ recode(.x, '6' = 1, .default = 0)),
+    across(starts_with("ptt_15_") & !contains("start") & !contains("end"), 
+           ~ recode(.x, '4' = 1, .default = 0)),
+    across(starts_with("ptt_16_") & !contains("start") & !contains("end"), 
+           ~ recode(.x, '3' = 1, .default = 0)),
+    across(starts_with("ptt_17_") & !contains("start") & !contains("end"), 
+           ~ recode(.x, '3' = 1, .default = 0)),
+    across(starts_with("ptt_18_") & !contains("start") & !contains("end"), 
+           ~ recode(.x, '6' = 1, .default = 0)),
+    across(starts_with("ptt_19_") & !contains("start") & !contains("end"), 
+           ~ recode(.x, '5' = 1, .default = 0)),
+    across(starts_with("ptt_20_") & !contains("start") & !contains("end"),  # "attention check"
+           ~ recode(.x, '2' = 1, .default = 0)),
+    across(starts_with("ptt_21_") & !contains("start") & !contains("end"), 
+           ~ recode(.x, '8' = 1, .default = 0)),
+    across(starts_with("ptt_22_") & !contains("start") & !contains("end"), 
+           ~ recode(.x, '1' = 1, .default = 0)),
+    across(starts_with("ptt_23_") & !contains("start") & !contains("end"), 
+           ~ recode(.x, '4' = 1, .default = 0)),
+    across(starts_with("ptt_24_") & !contains("start") & !contains("end"), 
+           ~ recode(.x, '7' = 1, .default = 0)),
+    across(starts_with("ptt_25_") & !contains("start") & !contains("end"), 
+           ~ recode(.x, '4' = 1, .default = 0)),
+    across(starts_with("ptt_26_") & !contains("start") & !contains("end"), 
+           ~ recode(.x, '5' = 1, .default = 0)),    
+    across(starts_with("ptt_27_") & !contains("start") & !contains("end"), 
+           ~ recode(.x, '1' = 1, .default = 0)),
+    across(starts_with("ptt_28_") & !contains("start") & !contains("end"), 
+           ~ recode(.x, '7' = 1, .default = 0)),
+    across(starts_with("ptt_29_") & !contains("start") & !contains("end"), 
+           ~ recode(.x, '2' = 1, .default = 0)),
+    across(starts_with("ptt_30_") & !contains("start") & !contains("end"), 
+           ~ recode(.x, '8' = 1, .default = 0)),
+    across(starts_with("ptt_31_") & !contains("start") & !contains("end"),  # "attention check"
+           ~ recode(.x, '6' = 1, .default = 0)),
+    across(starts_with("ptt_32_") & !contains("start") & !contains("end"), 
+           ~ recode(.x, '5' = 1, .default = 0)),
+    
+    # recode PTT
+    across(starts_with("ptp_1_") & !contains("start") & !contains("end"), 
+           ~ recode(.x, "Red Lego brick" = 1, .default = 0)),
+    across(starts_with("ptp_2_") & !contains("start") & !contains("end"), 
+           ~ recode(.x, "Black chair" = 1, .default = 0)),
+    across(starts_with("ptp_3_") & !contains("start") & !contains("end"), 
+           ~ recode(.x, "Watching television" = 1, .default = 0)),
+    across(starts_with("ptp_4_") & !contains("start") & !contains("end"),  
+           ~ recode(.x, "Green Lego brick" = 1, .default = 0)),
+    across(starts_with("ptp_5_") & !contains("start") & !contains("end"),  
+           ~ recode(.x, "Blue chair" = 1, .default = 0)),
+    across(starts_with("ptp_6_") & !contains("start") & !contains("end"),  
+           ~ recode(.x, "Reading" = 1, .default = 0)),
+    across(starts_with("ptp_7_") & !contains("start") & !contains("end"),  
+           ~ recode(.x, "Blue chair" = 1, .default = 0)),
+    across(starts_with("ptp_8_") & !contains("start") & !contains("end"),  
+           ~ recode(.x, "Blue chair" = 1, .default = 0)),
+    across(starts_with("ptp_9_") & !contains("start") & !contains("end"),  
+           ~ recode(.x, "Reading" = 1, .default = 0))
+    
+  )
+
+```
+
+# sum scores
+
+```{r}
+
+data_sum_scores <- data_recoded %>%
+  mutate(
+    # IRI
+    irifull_sum_t1 = rowSums(select(., starts_with("iri_") & 
+                                      contains("_t1") & 
+                                      !contains("start") & 
+                                      !contains("end"))),
+    irifull_missing_t1 = apply(select(., starts_with("iri_") & 
+                                        contains("_t1") & 
+                                        !contains("start") & 
+                                        !contains("end")), 1, function(x) sum(is.na(x))),
+    irifull_sum_t2 = rowSums(select(., starts_with("iri_") & 
+                                      contains("_t2") & 
+                                      !contains("start") & 
+                                      !contains("end"))),
+    irifull_missing_t2 = apply(select(., starts_with("iri_") & 
+                                        contains("_t2") & 
+                                        !contains("start") & 
+                                        !contains("end")), 1, function(x) sum(is.na(x))),
+    
+    iriec_sum_t1 = rowSums(select(., c("iri_2_t1", "iri_4_t1", "iri_9_t1", "iri_14_t1", 
+                                       "iri_18_t1", "iri_20_t1", "iri_22_t1") & 
+                                    !contains("start") & 
+                                    !contains("end"))),
+    irifs_sum_t1 = rowSums(select(., c("iri_1_t1", "iri_5_t1", "iri_7_t1", "iri_12_t1", 
+                                       "iri_16_t1", "iri_23_t1", "iri_26_t1") & 
+                                    !contains("start") & 
+                                    !contains("end"))),
+    iripd_sum_t1 = rowSums(select(., c("iri_6_t1", "iri_10_t1", "iri_13_t1", "iri_17_t1", 
+                                       "iri_19_t1", "iri_24_t1", "iri_27_t1") & 
+                                    !contains("start") & 
+                                    !contains("end"))),
+    iript_sum_t1 = rowSums(select(., c("iri_3_t1", "iri_8_t1", "iri_11_t1", "iri_15_t1", 
+                                       "iri_21_t1", "iri_25_t1", "iri_28_t1") & 
+                                    !contains("start") & 
+                                    !contains("end"))),
+    
+    iriec_sum_t2 = rowSums(select(., c("iri_2_t2", "iri_4_t2", "iri_9_t2", "iri_14_t2", 
+                                       "iri_18_t2", "iri_20_t2", "iri_22_t2") & 
+                                    !contains("start") & 
+                                    !contains("end"))),
+    irifs_sum_t2 = rowSums(select(., c("iri_1_t2", "iri_5_t2", "iri_7_t2", "iri_12_t2", 
+                                       "iri_16_t2", "iri_23_t2", "iri_26_t2") & 
+                                    !contains("start") & 
+                                    !contains("end"))),
+    iripd_sum_t2 = rowSums(select(., c("iri_6_t2", "iri_10_t2", "iri_13_t2", "iri_17_t2", 
+                                       "iri_19_t2", "iri_24_t2", "iri_27_t2") & 
+                                    !contains("start") & 
+                                    !contains("end"))),
+    iript_sum_t2 = rowSums(select(., c("iri_3_t2", "iri_8_t2", "iri_11_t2", "iri_15_t2", 
+                                       "iri_21_t2", "iri_25_t2", "iri_28_t2") & 
+                                    !contains("start") & 
+                                    !contains("end"))),
+    
+    # EQ
+    eqfull_sum_t1 = rowSums(select(., starts_with("eq_") & 
+                                     contains("_t1") & 
+                                     !contains("start") & 
+                                     !contains("end"))),
+    eqfull_missing_t1 = apply(select(., starts_with("eq_") & 
+                                       contains("_t1") & 
+                                       !contains("start") & 
+                                       !contains("end")), 1, function(x) sum(is.na(x))),
+    eqfull_sum_t2 = rowSums(select(., starts_with("eq_") & 
+                                     contains("_t2") & 
+                                     !contains("start") & 
+                                     !contains("end"))),
+    eqfull_missing_t2 = apply(select(., starts_with("eq_") & 
+                                       contains("_t2") & 
+                                       !contains("start") & 
+                                       !contains("end")), 1, function(x) sum(is.na(x))),
+    
+    ## EQ subscales using a subset of items
+    ## as created by Muncer & Ling (2006) and replicated by Allison et al. (2011)
+    eqcog_sum_t1 = rowSums(select(., c("eq_25_t1", "eq_26_t1", "eq_44_t1", "eq_52_t1", "eq_54_t1") & 
+                                    !contains("start") & 
+                                    !contains("end"))),
+    eqer_sum_t1 = rowSums(select(., c("eq_6_t1", "eq_27_t1", "eq_32_t1", "eq_50_t1", "eq_59_t1") & 
+                                   !contains("start") & 
+                                   !contains("end"))),
+    eqss_sum_t1 = rowSums(select(., c("eq_4_t1", "eq_8_t1", "eq_12_t1", "eq_14_t1", "eq_35_t1") & 
+                                   !contains("start") & 
+                                   !contains("end"))),
+    eqcog_sum_t2 = rowSums(select(., c("eq_25_t2", "eq_26_t2", "eq_44_t2", "eq_52_t2", "eq_54_t2") & 
+                                    !contains("start") & 
+                                    !contains("end"))),
+    eqer_sum_t2 = rowSums(select(., c("eq_6_t2", "eq_27_t2", "eq_32_t2", "eq_50_t2", "eq_59_t2") & 
+                                   !contains("start") & 
+                                   !contains("end"))),
+    eqss_sum_t2 = rowSums(select(., c("eq_4_t2", "eq_8_t2", "eq_12_t2", "eq_14_t2", "eq_35_t2") & 
+                                   !contains("start") & 
+                                   !contains("end"))),
+    
+    # PET
+    pet_sum_t1 = rowSums(select(., starts_with("pet_") & 
+                                  contains("_t1") & 
+                                  !contains("start") & 
+                                  !contains("end"))),
+    pet_missing_t1 = apply(select(., starts_with("pet_") & 
+                                    contains("_t1") & 
+                                    !contains("start") & 
+                                    !contains("end")), 1, function(x) sum(is.na(x))),
+    pet_sum_t2 = rowSums(select(., starts_with("pet_") & 
+                                  contains("_t2") & 
+                                  !contains("start") & 
+                                  !contains("end"))),
+    pet_missing_t2 = apply(select(., starts_with("pet_") & 
+                                    contains("_t2") & 
+                                    !contains("start") & 
+                                    !contains("end")), 1, function(x) sum(is.na(x))),
+    
+    # EYES
+    eyes_sum_t1 = rowSums(select(., starts_with("eyes_") & 
+                                   contains("_t1") & 
+                                   !contains("start") & 
+                                   !contains("end"))),
+    eyes_missing_t1 = apply(select(., starts_with("eyes_") & 
+                                     contains("_t1") & 
+                                     !contains("start") & 
+                                     !contains("end")), 1, function(x) sum(is.na(x))),
+    eyes_sum_t2 = rowSums(select(., starts_with("eyes_") & 
+                                   contains("_t2") & 
+                                   !contains("start") & 
+                                   !contains("end"))),
+    eyes_missing_t2 = apply(select(., starts_with("eyes_") & 
+                                     contains("_t2") & 
+                                     !contains("start") & 
+                                     !contains("end")), 1, function(x) sum(is.na(x))),
+    
+    # PTT
+    ptt_sum_t1 = rowSums(select(., starts_with("ptt_") & 
+                                  contains("_t1") & 
+                                  !contains("start") & 
+                                  !contains("end")),
+                         na.rm = TRUE),
+    ptt_missing_t1 = apply(select(., starts_with("ptt_") & 
+                                    contains("_t1") & 
+                                    !contains("start") & 
+                                    !contains("end")), 1, function(x) sum(is.na(x))),
+    ptt_sum_t1 = ifelse(ptt_missing_t1 == 32, NA, ptt_sum_t1),
+    ptt_sum_t2 = rowSums(select(., starts_with("ptt_") & 
+                                  contains("_t2") & 
+                                  !contains("start") & 
+                                  !contains("end")),
+                         na.rm = TRUE),
+    ptt_missing_t2 = apply(select(., starts_with("ptt_") & 
+                                    contains("_t2") & 
+                                    !contains("start") & 
+                                    !contains("end")), 1, function(x) sum(is.na(x))),
+    ptt_sum_t2 = ifelse(ptt_missing_t2 == 32, NA, ptt_sum_t2),
+    
+    # PTP
+    ptpfull_sum_t1 = rowSums(select(., starts_with("ptp_") & 
+                                      contains("_t1") & 
+                                      !contains("start") & 
+                                      !contains("end"))),
+    ptpfull_missing_t1 = apply(select(., starts_with("ptp_") & 
+                                        contains("_t1") & 
+                                        !contains("start") & 
+                                        !contains("end")), 1, function(x) sum(is.na(x))),
+    ptpfull_sum_t2 = rowSums(select(., starts_with("ptp_") & 
+                                      contains("_t2") & 
+                                      !contains("start") & 
+                                      !contains("end"))),
+    ptpfull_missing_t2 = apply(select(., starts_with("ptp_") & 
+                                        contains("_t2") & 
+                                        !contains("start") & 
+                                        !contains("end")), 1, function(x) sum(is.na(x))),
+    
+    ptpsimple_sum_t1 = rowSums(select(., c("ptp_1_t1", "ptp_2_t1", "ptp_3_t1") & 
+                                        !contains("start") & 
+                                        !contains("end"))),
+    ptpsingle_sum_t1 = rowSums(select(., c("ptp_4_t1", "ptp_5_t1", "ptp_6_t1") & 
+                                        !contains("start") & 
+                                        !contains("end"))),
+    ptpdouble_sum_t1 = rowSums(select(., c("ptp_7_t1", "ptp_8_t1", "ptp_9_t1") & 
+                                        !contains("start") & 
+                                        !contains("end"))),
+    
+    ptpsimple_sum_t2 = rowSums(select(., c("ptp_1_t2", "ptp_2_t2", "ptp_3_t2") & 
+                                        !contains("start") & 
+                                        !contains("end"))),
+    ptpsingle_sum_t2 = rowSums(select(., c("ptp_4_t2", "ptp_5_t2", "ptp_6_t2") & 
+                                        !contains("start") & 
+                                        !contains("end"))),
+    ptpdouble_sum_t2 = rowSums(select(., c("ptp_7_t2", "ptp_8_t2", "ptp_9_t2") & 
+                                        !contains("start") & 
+                                        !contains("end")))
+  )
+
+write_csv(data_sum_scores, "../../data/processed/data_processed.csv")
+
+```
+
+# prelim analyses
+
+## Wrangling
+
+```{r}
+
+data_sum_scores_only <- data_sum_scores |>
+  filter(attentioncheck_1_t1 == "passed" & attentioncheck_2_t1 == "passed" & 
+           (attentioncheck_1_t2 == "passed" | is.na(attentioncheck_1_t2)) & 
+           (attentioncheck_2_t2 == "passed" | is.na(attentioncheck_2_t2))) |>
+  select(id, 
+         starts_with("sites_"),
+         contains("_sum_")) |>
+  rename_with(~ str_replace(., "_sum_", "_"))
+
+data_sum_scores_wide <- data_sum_scores_only |>
+  pivot_longer(cols = -id,
+               names_to = "var",
+               values_to = "score") |>
+  separate_wider_delim(cols = "var", delim = "_", names = c("scale", "timepoint")) |>
+  pivot_wider(names_from = "timepoint",
+              values_from = "score") |>
+  mutate(scale = dplyr::recode(scale,
+                               "sites" = "Single Item Empathy Scale", # empathy (higher order)
+                               "irifull" = "IRI - Full Scale", # empathy (higher order)
+                               "iriec" = "IRI - Empathic Concern", # affective empathy
+                               "iripd" = "IRI - Personal Distress", # affective empathy
+                               "irifs" = "IRI - Fantasy", # cognitive empathy
+                               "iript" = "IRI - Perspective Taking", # cognitive empathy
+                               "eqfull" = "Empathy Quotient - Full Scale", # empathy (higher order)
+                               "eqcog" = "Empathy Quotient - Cognitive", # cognitive empathy
+                               "eqer" = "Empathy Quotient - Emotional reactivity", # affective empathy
+                               "eqss" = "Empathy Quotient - Social Skills", # social skills
+                               "pet" = "Pictoral Empathy Test", # affective empathy
+                               "eyes" = "Reading the Mind in the Eyes Test", # cognitive empathy & theory of mind
+                               "ptt" = "(Spatial) Perspective Taking Task for Adults", # spatial perspective taking
+                               "ptpfull" = "Perspective-Taking Protocol - Short Form", # deictic relational responding
+                               "ptpsimple" = "Perspective-Taking Protocol - Simple", # deictic relational responding		
+                               "ptpsingle" = "Perspective-Taking Protocol - Reversed ", # deictic relational responding		
+                               "ptpdouble" = "Perspective-Taking Protocol - Double reversed")) # deictic relational responding
+
+```
+
+## Scatter plots
+
+### Between timepoints
+
+```{r fig.height=13, fig.width=7}
+
+ggplot(data_sum_scores_wide, aes(t1, t2)) +
+  geom_abline(slope = 1, intercept = 0, linetype = "dotted") +
+  geom_jitter(position = position_jitter(width = 0.1), alpha = 0.4) +
+  facet_wrap(~ scale, scales = "free", ncol = 3) +
+  xlab("Timepoint 1") +
+  ylab("Timepoint 2") +
+  theme_linedraw()
+
+```
+
+### Between variables at T1
+
+```{r fig.height=5, fig.width=5}
+
+ggplot(data_sum_scores_only, aes(ptpfull_t1, ptt_t1)) +
+  geom_jitter(position = position_jitter(width = 0.1), alpha = 0.4) +
+  geom_smooth(method = "lm") +
+  xlab("PT Protocol") +
+  ylab("Spatial PT") +
+  theme_linedraw()
+
+ggplot(data_sum_scores_only, aes(ptpfull_t1, iript_t1)) +
+  geom_jitter(position = position_jitter(width = 0.1), alpha = 0.4) +
+  geom_smooth(method = "lm") +
+  xlab("PT Protocol") +
+  ylab("IRI PT") +
+  theme_linedraw()
+
+ggplot(data_sum_scores_only, aes(ptpfull_t1, eqcog_t1)) +
+  geom_jitter(position = position_jitter(width = 0.1), alpha = 0.4) +
+  geom_smooth(method = "lm") +
+  xlab("PT Protocol") +
+  ylab("EQ cognitive empathy") +
+  theme_linedraw()
+
+ggplot(data_sum_scores_only, aes(ptpfull_t1, eyes_t1)) +
+  geom_jitter(position = position_jitter(width = 0.1), alpha = 0.4) +
+  geom_smooth(method = "lm") +
+  xlab("PT Protocol") +
+  ylab("Reading the Mind in the Eyes Test") +
+  theme_linedraw()
+
+```
+
+## Correlations
+
+```{r}
+
+data_sum_scores_only |>
+  select(-id) |>
+  select(ends_with("t1")) |>
+  cor(use = "pairwise.complete.obs") |>
+  round(2)
+
+data_sum_scores_only |>
+  select(-id) |>
+  select(ends_with("t2")) |>
+  cor(use = "pairwise.complete.obs") |>
+  round(2)
+
+```
+
+```{r fig.height=15, fig.width=15}
+
+mat_1 <- data_sum_scores_only |>
+  select(ends_with("t1")) |>
+  cor() |>
+  janitor::round_half_up(digits = 2)
+
+mat_1[upper.tri(mat_1, diag = TRUE)] <- ""
+
+#diag(mat_1) <- janitor::round_half_up(data_icc$ICC2, digits = 2) # data_icc not created until further below
+
+mat_1 |>
+  kable() |>
+  kable_classic(full_width = FALSE)
+
+library(ggpairs)
+
+data_sum_scores_only |>
+  select(ends_with("t1"), 
+         -ptpsimple_t1,
+         -ptpsingle_t1,
+         -ptpdouble_t1,
+         -ptpsimple_t2,
+         -ptpsingle_t2,
+         -ptpdouble_t2) |>
+  ggpairs(progress = FALSE,
+          lower = list(continuous = wrap("smooth", method = "lm", alpha = 0.2)))
+
+```
+
+## SEM
+
+```{r}
+
+library(lavaan)
+
+dat <- data_sum_scores |>
+  filter(attentioncheck_1_t1 == "passed" & attentioncheck_2_t1 == "passed" & 
+           (attentioncheck_1_t2 == "passed" | is.na(attentioncheck_1_t2)) & 
+           (attentioncheck_2_t2 == "passed" | is.na(attentioncheck_2_t2)))
+
+# # specify model
+# analysis_model_of_observed <- '
+#   # latent variables
+#   IRIPT =~ iript_t1 + iript_t2
+#   EQCOG =~ eqcog_t1 + eqcog_t2
+#   SPAT =~ ptt_t1 + ptt_t2
+#   DEIC =~ ptpfull_t1 + ptpfull_t2
+# 
+#   # covariances between latent variables
+#   IRIPT ~~ EQCOG + SPAT + DEIC
+#   EQCOG ~~ SPAT + DEIC
+#   SPAT ~~ DEIC
+# 
+#   # covariances between the same scale across timepoints
+#   iript_t1 ~~ iript_t2
+#   eqcog_t1 ~~ eqcog_t2
+#   ptt_t1 ~~ ptt_t2
+#   ptpfull_t1 ~~ ptpfull_t2
+# '
+
+# specify model
+analysis_model_of_observed <- '
+  # latent variables
+  IRIPT =~ iri_3_t1 + iri_8_t1 + iri_11_t1 + iri_15_t1 + iri_21_t1 + iri_25_t1 + iri_28_t1 + iri_3_t2 + iri_8_t2 + iri_11_t2 + iri_15_t2 + iri_21_t2 + iri_25_t2 + iri_28_t2
+  EQCOG =~ eq_25_t1 + eq_26_t1 + eq_44_t1 + eq_52_t1 + eq_54_t1 + eq_25_t2 + eq_26_t2 + eq_44_t2 + eq_52_t2 + eq_54_t2
+  DEIC =~ ptp_1_t1 + ptp_2_t1 + ptp_3_t1 + ptp_4_t1 + ptp_5_t1 + ptp_6_t1 + ptp_7_t1 + ptp_8_t1 + ptp_9_t1 + ptp_1_t2 + ptp_2_t2 + ptp_3_t2 + ptp_4_t2 + ptp_5_t2 + ptp_6_t2 + ptp_7_t2 + ptp_8_t2 + ptp_9_t2
+
+  # covariances between the same scale across timepoints
+  iri_3_t1 ~~ iri_3_t2
+  iri_8_t1 ~~ iri_8_t2
+  iri_11_t1 ~~ iri_11_t2
+  iri_15_t1 ~~ iri_15_t2
+  iri_21_t1 ~~ iri_21_t2
+  iri_25_t1 ~~ iri_25_t2
+  iri_28_t1 ~~ iri_28_t2
+
+  eq_25_t1 ~~ eq_25_t2
+  eq_26_t1 ~~ eq_26_t2
+  eq_44_t1 ~~ eq_44_t2
+  eq_52_t1 ~~ eq_52_t2
+  eq_54_t1 ~~ eq_54_t2
+
+  ptp_1_t1 ~~ ptp_1_t2
+  ptp_2_t1 ~~ ptp_2_t2
+  ptp_3_t1 ~~ ptp_3_t2
+  ptp_4_t1 ~~ ptp_4_t2
+  ptp_5_t1 ~~ ptp_5_t2
+  ptp_6_t1 ~~ ptp_6_t2
+  ptp_7_t1 ~~ ptp_7_t2
+  ptp_8_t1 ~~ ptp_8_t2
+  ptp_9_t1 ~~ ptp_9_t2
+  '
+
+analysis_model_of_observed <- '
+  # latent variables
+  IRIPT_t1 =~ iri_3_t1 + iri_8_t1 + iri_11_t1 + iri_15_t1 + iri_21_t1 + iri_25_t1 + iri_28_t1
+  IRIPT_t2 =~ iri_3_t2 + iri_8_t2 + iri_11_t2 + iri_15_t2 + iri_21_t2 + iri_25_t2 + iri_28_t2
+  EQCOG_t1 =~ eq_25_t1 + eq_26_t1 + eq_44_t1 + eq_52_t1 + eq_54_t1
+  EQCOG_t2 =~ eq_25_t2 + eq_26_t2 + eq_44_t2 + eq_52_t2 + eq_54_t2
+  DEIC_t1 =~ ptp_1_t1 + ptp_2_t1 + ptp_3_t1 + ptp_4_t1 + ptp_5_t1 + ptp_6_t1 + ptp_7_t1 + ptp_8_t1 + ptp_9_t1
+  DEIC_t2 =~ ptp_1_t2 + ptp_2_t2 + ptp_3_t2 + ptp_4_t2 + ptp_5_t2 + ptp_6_t2 + ptp_7_t2 + ptp_8_t2 + ptp_9_t2
+
+  IRIPT =~ IRIPT_t1 + IRIPT_t2
+  EQCOG =~ EQCOG_t1 + EQCOG_t2
+  DEIC =~ DEIC_t1 + DEIC_t2
+
+  # IRIPT_t1 ~~ IRIPT_t2
+  # EQCOG_t1 ~~ EQCOG_t2
+  # DEIC_t1 ~~ DEIC_t2
+
+  # covariances between the same scale across timepoints
+  iri_3_t1 ~~ iri_3_t2
+  iri_8_t1 ~~ iri_8_t2
+  iri_11_t1 ~~ iri_11_t2
+  iri_15_t1 ~~ iri_15_t2
+  iri_21_t1 ~~ iri_21_t2
+  iri_25_t1 ~~ iri_25_t2
+  iri_28_t1 ~~ iri_28_t2
+  
+  eq_25_t1 ~~ eq_25_t2
+  eq_26_t1 ~~ eq_26_t2
+  eq_44_t1 ~~ eq_44_t2
+  eq_52_t1 ~~ eq_52_t2
+  eq_54_t1 ~~ eq_54_t2
+  
+  ptp_1_t1 ~~ ptp_1_t2
+  ptp_2_t1 ~~ ptp_2_t2
+  ptp_3_t1 ~~ ptp_3_t2
+  ptp_4_t1 ~~ ptp_4_t2
+  ptp_5_t1 ~~ ptp_5_t2
+  ptp_6_t1 ~~ ptp_6_t2
+  ptp_7_t1 ~~ ptp_7_t2
+  ptp_8_t1 ~~ ptp_8_t2
+  ptp_9_t1 ~~ ptp_9_t2
+  '
+
+# fit model
+fit_of_observed <- 
+  sem(model = analysis_model_of_observed, 
+      std.lv = TRUE,
+      data = dat)
+
+semPaths(fit_of_observed, what = "std", fade = FALSE)
+
+standardizedSolution(fit_of_observed) |>
+  # filter(op == "~~" & 
+  #          lhs != rhs & 
+  #          !str_detect(lhs, "_t")) |>
+  select(lhs, op, rhs, 
+         estimate = est.std, 
+         ci_lower = ci.lower, 
+         ci_upper = ci.upper) |>
+  mutate_if(is.numeric, janitor::round_half_up, digits = 2) |>
+  kable() |>
+  kable_classic(full_width = FALSE)
+
+# # results
+# summary(fit_of_observed)
+
+parameterestimates(fit_of_observed, rsquare = TRUE) |>
+  filter(op == "r2") |>
+  select(lhs, r2 = est) |>
+  mutate_if(is.numeric, janitor::round_half_up, digits = 2) |>
+  kable() |>
+  kable_classic(full_width = FALSE)
+
+# fit measures
+fit_measures <- c("cfi", "tli", "srmr", "rmsea")
+
+tibble(metric = toupper(fit_measures),
+       value = janitor::round_half_up(fitMeasures(fit_of_observed, fit.measures = fit_measures), 3)) |>
+  pivot_wider(names_from = metric, 
+              values_from = value) |>
+  kable() |>
+  kable_classic(full_width = FALSE)
+
+```
+
+## ICC
+
+```{r}
+
+library(irr)
+
+calc_icc <- function(dat){
+  require(irr)
+  
+  fit <- dat %>%
+    dplyr::select(t1, t2) %>%
+    irr::icc(., model = "twoway", type = "agreement", unit = "single")
+  
+  res <- tibble(
+    n = fit$subjects,
+    raters = fit$raters,
+    model = fit$model,
+    unit = fit$unit,
+    icc = fit$value,
+    lower_bound = fit$lbound,
+    upper_bound = fit$ubound
+  )
+  
+  return(res)
+}
+
+results_icc <- data_sum_scores_wide |>
+  group_by(scale) %>%
+  do(calc_icc(.))
+
+results_icc |>
+  mutate_if(is.numeric, janitor::round_half_up, digits = 2) |>
+  select(scale, icc, lower_bound, upper_bound) |>
+  knitr::kable() |>
+  kableExtra::kable_classic()
+
+# results_r <- data_sum_scores_wide %>%
+#   group_by(scale) %>%
+#   summarize(
+#     correlation_data = list(cor.test(t1, t2)),
+#     CI_data = list(r.test(n = n(), r = cor(t1, t2)))
+#   ) %>%
+#   mutate(
+#     r = map_dbl(correlation_data, ~.$estimate),
+#     ci_lower = map_dbl(CI_data, ~.$conf.int[1]),
+#     ci_upper = map_dbl(CI_data, ~.$conf.int[2])
+#   ) %>%
+#   dplyr::select(-correlation_data, -CI_data)
+
+```
+
+
+
+

@@ -1,0 +1,586 @@
+---
+title: "Empathy and perspective taking"
+subtitle: "Analyses"
+author: "Ian Hussey"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+output:
+  html_document:
+    code_folding: hide
+    highlight: haddock
+    theme: flatly
+    toc: yes
+    toc_float: yes
+---
+
+Reworking of Marcus' code
+
+# Overview
+
+- A shortened version of the PT protocol is shown to have very bad internal consistency, test-retest reliability, convergent validity, and poor structural validity.
+- The issue is that it is a shortened version of the protocol. For this to be more widely accepted, we might need to run an additional study with a longer version of it. 
+
+# TODO
+
+- remove PTTA from CFA? it was a separate exploratory hypothesis
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(message = FALSE,
+                      warning = FALSE)
+```
+
+# Dependencies
+
+```{r}
+
+library(readr)
+library(dplyr)
+library(tidyr)
+library(stringr)
+library(forcats)
+library(irr)
+library(psych)
+library(lavaan)
+library(janitor)
+library(ggplot2)
+library(ggrain)
+library(scales)
+library(mirt)
+library(correlation)
+library(see)
+library(insight)
+library(purrr)
+library(knitr)
+library(kableExtra)
+
+options(scipen=999)
+
+```
+
+# Load data
+
+```{r}
+
+data_processed <- read_csv("../data/processed/data_processed.csv") 
+
+data_processed_after_exclusions <- data_processed |>
+  filter(exclude_master == "include")
+
+```
+
+# Demographics
+
+## Sample sizes and exclusions
+
+```{r}
+
+data_processed |>
+  count(timepoint, exclude_master) |>
+  kable(align = "r") |>
+  kable_classic(full_width = FALSE)
+
+```
+
+## Analytic sample (timepoint 1)
+
+```{r}
+
+data_processed_after_exclusions |>
+  filter(timepoint == 1) |>
+  count(gender) |>
+  kable(align = "r") |>
+  kable_classic(full_width = FALSE)
+
+data_processed_after_exclusions |>
+  filter(timepoint == 1) |>
+  dplyr::summarize(mean_age = mean(age),
+                   sd_age = sd(age),
+                   min_age = min(age),
+                   max_age = max(age)) |>
+  pivot_longer(cols = everything()) |>
+  mutate(across(where(is.numeric), ~ round_half_up(.x, digits = 2))) |>
+  kable(align = "r") |>
+  kable_classic(full_width = FALSE)
+
+data_processed_after_exclusions |>
+  distinct(unique_id, .keep_all = TRUE) |>
+  ggplot(aes(age)) +
+  geom_histogram(binwidth = 5) +
+  theme_linedraw()
+
+```
+
+# Analyses
+
+## Test-retest
+
+$ICC_{2,1}$
+
+### Results
+
+```{r}
+
+data_reshaped <- data_processed_after_exclusions |>
+  select(unique_id, timepoint, SITES, IRI_FS, IRI_EC, IRI_PT, IRI_PD, IRI_total, EQ_total, PET_total, EYES_total, PTP_simple, PTP_reversed, PTP_doublereversed, PTP_total, PTTA_total) |>
+  pivot_wider(id_cols = unique_id,
+              names_from = timepoint,
+              values_from = c(SITES, IRI_FS, IRI_EC, IRI_PT, IRI_PD, IRI_total, EQ_total, PET_total, EYES_total, PTP_simple, PTP_reversed, PTP_doublereversed, PTP_total, PTTA_total))
+
+tidy_icc_2_1 <- function(data, scale){
+  res <- data |>
+    select(starts_with(scale)) |>
+    irr::icc(model = "twoway", type = "agreement", unit = "single",
+             r0 = 0, conf.level = 0.95)
+  
+  tibble(scale = scale,
+         icc_2.1 = res$value,
+         ci_lower = res$lbound,
+         ci_upper = res$ubound)
+}
+
+res <- bind_rows(
+  tidy_icc_2_1(data_reshaped, "SITES"),
+  tidy_icc_2_1(data_reshaped, "IRI_FS"),
+  tidy_icc_2_1(data_reshaped, "IRI_EC"),
+  tidy_icc_2_1(data_reshaped, "IRI_PT"),
+  tidy_icc_2_1(data_reshaped, "IRI_PD"),
+  tidy_icc_2_1(data_reshaped, "IRI_total"),
+  tidy_icc_2_1(data_reshaped, "EQ_total"),
+  tidy_icc_2_1(data_reshaped, "PET_total"),
+  tidy_icc_2_1(data_reshaped, "EYES_total"),
+  tidy_icc_2_1(data_reshaped, "PTP_simple"),
+  tidy_icc_2_1(data_reshaped, "PTP_reversed"),
+  tidy_icc_2_1(data_reshaped, "PTP_doublereversed"),
+  tidy_icc_2_1(data_reshaped, "PTP_total"),
+  tidy_icc_2_1(data_reshaped, "PTTA_total")
+)
+  
+res |>
+  mutate(across(where(is.numeric), ~ round_half_up(.x, digits = 2))) |>
+  kable(align = "r") |>
+  kable_classic(full_width = FALSE)
+
+```
+
+### Plots
+
+```{r}
+
+round_half_up_trailing <- function(x, digits = 2) {
+  x_rounded <- round_half_up(x, digits = digits)
+  sprintf("%.*f", digits, x_rounded)
+}
+
+res_print <- res |>
+  mutate(across(where(is.numeric), ~ round_half_up_trailing(.x, digits = 2))) |>
+  mutate(string = paste0("= ", icc_2.1, ", 95% CI [", ci_lower, ", ", ci_upper, "]")) |>
+  select(scale, string)
+
+data_reshaped_plotting <- data_processed_after_exclusions |>
+  select(unique_id, timepoint, SITES, IRI_FS, IRI_EC, IRI_PT, IRI_PD, IRI_total, EQ_total, PET_total, EYES_total, PTP_total, PTTA_total) |>
+  pivot_longer(cols = c(SITES, IRI_FS, IRI_EC, IRI_PT, IRI_PD, IRI_total, EQ_total, PET_total, EYES_total, PTP_total, PTTA_total),
+               names_to = "scale",
+               values_to = "score")
+
+data_reshaped_plotting |>
+  filter(scale == "IRI_total") |>
+  ggplot(aes(as.factor(timepoint), score, fill = as.factor(timepoint))) +
+  geom_rain(alpha = .5, rain.side = 'f1x1', id.long.var = "unique_id") +
+  theme_classic() +
+  scale_fill_manual(values=c("dodgerblue", "darkorange")) +
+  guides(fill = 'none', color = 'none') +
+  ylab("Score") +
+  xlab("Time point") +
+  ggtitle(bquote("Interpersonal Reactivity Index:" ~ ICC["2,1"] ~ .(res_print |> filter(scale == "IRI_total") |> pull(string)))) +
+  scale_y_continuous(breaks = scales::breaks_pretty(n = 6))
+
+data_reshaped_plotting |>
+  filter(scale == "IRI_PT") |>
+  ggplot(aes(as.factor(timepoint), score, fill = as.factor(timepoint))) +
+  geom_rain(alpha = .5, rain.side = 'f1x1', id.long.var = "unique_id") +
+  theme_classic() +
+  scale_fill_manual(values=c("dodgerblue", "darkorange")) +
+  guides(fill = 'none', color = 'none') +
+  ylab("Score") +
+  xlab("Time point") +
+  ggtitle(bquote("IRI - Perspective Taking Subscale:" ~ ICC["2,1"] ~ .(res_print |> filter(scale == "IRI_PT") |> pull(string)))) +
+  scale_y_continuous(breaks = scales::breaks_pretty(n = 6))
+
+data_reshaped_plotting |>
+  filter(scale == "SITES") |>
+  ggplot(aes(as.factor(timepoint), score, fill = as.factor(timepoint))) +
+  geom_rain(alpha = .5, rain.side = 'f1x1', id.long.var = "unique_id", likert = TRUE) +
+  theme_classic() +
+  scale_fill_manual(values=c("dodgerblue", "darkorange")) +
+  guides(fill = 'none', color = 'none') +
+  ylab("Score") +
+  xlab("Time point") +
+  ggtitle(bquote("Single Item Trait Empathy Scale:" ~ ICC["2,1"] ~ .(res_print |> filter(scale == "SITES") |> pull(string)))) +
+  scale_y_continuous(breaks = scales::breaks_pretty(n = 6))
+
+data_reshaped_plotting |>
+  filter(scale == "PET_total") |>
+  ggplot(aes(as.factor(timepoint), score, fill = as.factor(timepoint))) +
+  geom_rain(alpha = .5, rain.side = 'f1x1', id.long.var = "unique_id") +
+  theme_classic() +
+  scale_fill_manual(values=c("dodgerblue", "darkorange")) +
+  guides(fill = 'none', color = 'none') +
+  ylab("Score") +
+  xlab("Time point") +
+  ggtitle(bquote("Pictoral Empathy Test:" ~ ICC["2,1"] ~ .(res_print |> filter(scale == "PET_total") |> pull(string)))) +
+  scale_y_continuous(breaks = scales::breaks_pretty(n = 6))
+
+data_reshaped_plotting |>
+  filter(scale == "EQ_total") |>
+  ggplot(aes(as.factor(timepoint), score, fill = as.factor(timepoint))) +
+  geom_rain(alpha = .5, rain.side = 'f1x1', id.long.var = "unique_id") +
+  theme_classic() +
+  scale_fill_manual(values=c("dodgerblue", "darkorange")) +
+  guides(fill = 'none', color = 'none') +
+  ylab("Score") +
+  xlab("Time point") +
+  ggtitle(bquote("Emotional Quotient:" ~ ICC["2,1"] ~ .(res_print |> filter(scale == "EQ_total") |> pull(string)))) +
+  scale_y_continuous(breaks = scales::breaks_pretty(n = 6))
+
+data_reshaped_plotting |>
+  filter(scale == "EYES_total") |>
+  ggplot(aes(as.factor(timepoint), score, fill = as.factor(timepoint))) +
+  geom_rain(alpha = .5, rain.side = 'f1x1', id.long.var = "unique_id") +
+  theme_classic() +
+  scale_fill_manual(values=c("dodgerblue", "darkorange")) +
+  guides(fill = 'none', color = 'none') +
+  ylab("Score") +
+  xlab("Time point") +
+  ggtitle(bquote("Reading the Mind in the Eyes Test:" ~ ICC["2,1"] ~ .(res_print |> filter(scale == "EYES_total") |> pull(string)))) +
+  scale_y_continuous(breaks = scales::breaks_pretty(n = 6))
+
+data_reshaped_plotting |>
+  filter(scale == "PTTA_total") |>
+  ggplot(aes(as.factor(timepoint), score, fill = as.factor(timepoint))) +
+  geom_rain(alpha = .5, rain.side = 'f1x1', id.long.var = "unique_id") +
+  theme_classic() +
+  scale_fill_manual(values=c("dodgerblue", "darkorange")) +
+  guides(fill = 'none', color = 'none') +
+  ylab("Score") +
+  xlab("Time point") +
+  ggtitle(bquote("Perspective Taking Task for Adults:" ~ ICC["2,1"] ~ .(res_print |> filter(scale == "PTTA_total") |> pull(string)))) +
+  scale_y_continuous(breaks = scales::breaks_pretty(n = 6))
+
+data_reshaped_plotting |>
+  filter(scale == "PTP_total") |>
+  ggplot(aes(as.factor(timepoint), score, fill = as.factor(timepoint))) +
+  geom_rain(alpha = .5, rain.side = 'f1x1', id.long.var = "unique_id", likert = TRUE) +
+  theme_classic() +
+  scale_fill_manual(values=c("dodgerblue", "darkorange")) +
+  guides(fill = 'none', color = 'none') +
+  ylab("Score") +
+  xlab("Time point") +
+  ggtitle(bquote("Perspective Taking Protocol:" ~ ICC["2,1"] ~ .(res_print |> filter(scale == "PTP_total") |> pull(string)))) +
+  scale_y_continuous(breaks = scales::breaks_pretty(n = 6))
+
+```
+
+## Internal consistency 
+
+Cronbach's $\alpha$
+
+```{r}
+
+data_subset <- data_processed_after_exclusions |>
+  dplyr::select(timepoint, 
+                starts_with("IRI_"), 
+                starts_with("EQ_"),
+                starts_with("PET_"),
+                starts_with("EYES_"),
+                starts_with("PTP_"),
+                starts_with("PTTA_")) |>
+  dplyr::select(-PTP_simple, -PTP_reversed, -PTP_doublereversed) |>
+  dplyr::select(-IRI_FS, -IRI_EC, -IRI_PT, -IRI_PD) |>
+  dplyr::select(!ends_with("_completeness") & !ends_with("_total"))
+
+tidy_alpha <- function(data, time, scale){
+  res <- data |>
+    filter(timepoint == time) |>
+    dplyr::select(starts_with(scale)) |>
+    psych::alpha()
+  
+  res2 <- res$feldt 
+  
+  tibble(scale = scale,
+         timepoint = time,
+         alpha = res2$alpha$raw_alpha,
+         ci_lower = res2$lower.ci$raw_alpha,
+         ci_upper = res2$upper.ci$raw_alpha)
+}
+
+res <- bind_rows(
+  tidy_alpha(data = data_subset, time = 1, scale = "IRI_"),
+  tidy_alpha(data = data_subset, time = 2, scale = "IRI_"),
+  tidy_alpha(data = data_subset, time = 1, scale = "EQ_"),
+  tidy_alpha(data = data_subset, time = 2, scale = "EQ_"),
+  tidy_alpha(data = data_subset, time = 1, scale = "PET_"),
+  tidy_alpha(data = data_subset, time = 2, scale = "PET_"),
+  tidy_alpha(data = data_subset, time = 1, scale = "EYES_"),
+  tidy_alpha(data = data_subset, time = 2, scale = "EYES_"),
+  tidy_alpha(data = data_subset, time = 1, scale = "PTP_"),
+  tidy_alpha(data = data_subset, time = 2, scale = "PTP_"),
+  tidy_alpha(data = data_subset, time = 1, scale = "PTTA_"),
+  tidy_alpha(data = data_subset, time = 2, scale = "PTTA_")
+)
+
+res |>
+  mutate(across(where(is.numeric), ~ round_half_up(.x, digits = 2))) |>
+  kable(align = "r") |>
+  kable_classic(full_width = FALSE)
+
+```
+
+- TODO: add subscales for IRI + other scales
+
+## Correlations
+
+```{r}
+
+dat <- data_processed |>
+  filter(timepoint == 1)
+
+```
+
+### Scale correlations
+
+```{r fig.height=4, fig.width=5}
+
+scale_cors <- dat |>
+  select(SITES, ends_with("_total")) |>
+  rename_with(~ str_remove(.x, "_total")) |>
+  correlation()
+
+res <- scale_cors |>
+  as.data.frame() |>
+  select(Parameter1, Parameter2, r, ci_low = CI_low, ci_high = CI_high, p) 
+
+res |>
+  mutate(p = insight::format_p(p)) |>
+  mutate(across(where(is.numeric), ~ round_half_up(.x, digits = 2))) |>
+  kable(align = "r") |>
+  kable_classic(full_width = FALSE)
+  
+scale_cors |>
+  summary() |>
+  plot(show_data = "points") +
+  theme_linedraw() +
+  ggtitle("")
+
+average_cors_all <- res |>
+  dplyr::summarize(mean_r = mean(r)) |>
+  pull(mean_r) |>
+  round_half_up(digits = 2)
+
+average_cors_ptp <- res |>
+  filter(Parameter1 == "PTP" | Parameter2 == "PTP") |>
+  dplyr::summarize(mean_r = mean(r)) |>
+  pull(mean_r) |>
+  round_half_up(digits = 2)
+
+```
+
+Average correlation among all scales: `r average_cors_all`
+
+Average correlation between PTP and other scales: `r average_cors_ptp`
+
+### Subscale correlations
+
+```{r fig.height=8, fig.width=14}
+
+subscale_cors <- dat |>
+  select(SITES, IRI_FS, IRI_EC, IRI_PT, IRI_PD, 
+         PTP_simple, PTP_reversed, PTP_doublereversed, 
+         ends_with("_total")) |>
+  rename_with(~ str_remove(.x, "_total")) |>
+  correlation() 
+
+subscale_cors |>
+  as.data.frame() |>
+  select(Parameter1, Parameter2, r, ci_low = CI_low, ci_high = CI_high, p) |>
+  mutate(p = insight::format_p(p)) |>
+  mutate(across(where(is.numeric), ~ round_half_up(.x, digits = 2))) |>
+  kable(align = "r") |>
+  kable_classic(full_width = FALSE)
+
+# code repeated in order to use the rename, which screws up the table but is needed for the plot
+dat |>
+  select(SITES, IRI_FS, IRI_EC, IRI_PT, IRI_PD, 
+         PTP_simple, PTP_reversed, PTP_doublereversed, 
+         ends_with("_total")) |>
+  rename_with(~ str_remove(.x, "_total")) |>
+  rename_with(~ str_replace(.x, "_", "\n")) |>
+  correlation()  |>
+  summary() |>
+  plot(show_data = "points") +
+  theme_linedraw() +
+  ggtitle("")
+
+```
+
+## SEM
+
+```{r}
+
+dat <- data_processed |>
+  filter(timepoint == 1) |>
+  select(SITES, ends_with("_total"), IRI_PT)
+
+# model <- '
+#          PT =~ SITES + IRI_total + EQ_total + PET_total + EYES_total + PTP_total + PTTA_total
+#          '
+
+model <- '
+         PT =~ SITES + IRI_total + EQ_total + PET_total + EYES_total + PTP_total
+         '
+
+fit <- cfa(model = model, 
+           data = dat)
+
+fitMeasures(fit, fit.measures = c("cfi", "tli", "rmsea", "srmr", "chisq", "df", "pvalue"))
+
+standardizedSolution(fit) |>
+  filter(op != "~~") |>
+  select(scale = rhs, est.std, ci.lower, ci.upper, p = pvalue) |>
+  mutate(p = insight::format_p(p)) |>
+  mutate(across(where(is.numeric), ~ round_half_up(.x, digits = 2))) |>
+  kable(align = "r") |>
+  kable_classic(full_width = FALSE)
+
+```
+
+- The overall model fits adequately, suggesting that the scales are collectively measuring a latent factor (empathy/PT). 
+- Non significant loading of PTP onto the latent factor suggests it is not a good measure of this latent factor of empathy/PT.
+
+## Rasch analysis of PTP
+
+### Unidimensional
+
+```{r}
+
+# subset data
+dat <- data_processed_after_exclusions |>
+  filter(timepoint == 1) |>
+  select(starts_with("PTP_")) |>
+  select(-PTP_simple, -PTP_reversed, -PTP_doublereversed, -PTP_completeness, -PTP_total)
+
+# fit model
+#uni_model <- mirt(dat, model = 1, itemtype = "2PL")
+uni_model <- mirt(dat, model = 1, itemtype = "Rasch")
+
+# model fit stats
+M2(uni_model) |>
+  mutate(p = insight::format_p(p)) |>
+  mutate(across(where(is.numeric), ~ round_half_up(.x, digits = 2))) |>
+  kable(align = "r") |>
+  kable_classic(full_width = FALSE)
+
+# item parameters
+coefs_uni <- coef(uni_model, IRTpars = TRUE) # Extract item parameters in IRT metric
+
+item_parameters <- coefs_uni  |>
+  discard(names(coefs_uni) == "GroupPars") %>% # Exclude GroupPars if needed
+  imap_dfr(~ as_tibble(.x, rownames = "parameter") %>% 
+             mutate(PTP = .y)) %>%
+  relocate(PTP) |>
+  rename(item = PTP) |>
+  mutate(subscale = case_when(item %in% c("PTP_1", "PTP_2", "PTP_3") ~ "simple",
+                              item %in% c("PTP_4", "PTP_5", "PTP_6") ~ "reversed",
+                              item %in% c("PTP_7", "PTP_8", "PTP_9") ~ "doublereversed"),
+         subscale = fct_relevel(subscale, "simple", "reversed", "doublereversed")) |>
+  select(item, subscale, difficulty = b)
+
+item_parameters |>
+  mutate(across(where(is.numeric), ~ round_half_up(.x, digits = 2))) |>
+  kable(align = "r") |>
+  kable_classic(full_width = FALSE)
+
+item_parameters |>
+  group_by(subscale) |>
+  dplyr::summarize(mean_difficulty = mean(difficulty)) |>
+  mutate(across(where(is.numeric), ~ round_half_up(.x, digits = 2))) |>
+  kable(align = "r") |>
+  kable_classic(full_width = FALSE)
+
+```
+
+- p < 0.05 indicates potential model misfit.
+- RMSEA < 0.05: Good fit; RMSEA between 0.05 and 0.08: Acceptable fit; RMSEA > 0.10: Poor fit.
+
+### Multidimensional
+
+```{r}
+
+# Model specification: 'F1' loads on items 1-3, 'F2' on items 4-6, 'F3' on items 7-9.
+# three_factor_model <- '
+#                       F1 = 1-3
+#                       F2 = 4-6
+#                       F3 = 7-9
+#                       '
+
+# PTP_7 was incorrectly implemented as a single reversed trial in the survey instead of double. Corrected here.
+three_factor_model <- '
+                      F1 = 1-3
+                      F2 = 4-7
+                      F3 = 8-9
+                      '
+
+# Fit the multidimensional model
+multi_model <- mirt(dat, model = three_factor_model, itemtype = "Rasch")
+
+# Compare models using anova 
+anova(uni_model, multi_model)
+# > multi provides better fit
+
+# model fit stats
+M2(multi_model) |>
+  mutate(p = insight::format_p(p)) |>
+  mutate(across(where(is.numeric), ~ round_half_up(.x, digits = 3))) |>
+  kable(align = "r") |>
+  kable_classic(full_width = FALSE)
+
+# item parameters
+coefs_multi <- coef(multi_model, IRTpars = TRUE) # Extract item parameters in IRT metric
+
+item_parameters_multi <- coefs_multi  |>
+  discard(names(coefs_multi) == "GroupPars") %>% # Exclude GroupPars if needed
+  imap_dfr(~ as_tibble(.x, rownames = "parameter") %>% 
+             mutate(PTP = .y)) %>%
+  relocate(PTP) |>
+  rename(item = PTP) |>
+  mutate(subscale = case_when(item %in% c("PTP_1", "PTP_2", "PTP_3") ~ "simple",
+                              item %in% c("PTP_4", "PTP_5", "PTP_6") ~ "reversed",
+                              item %in% c("PTP_7", "PTP_8", "PTP_9") ~ "doublereversed"),
+         subscale = fct_relevel(subscale, "simple", "reversed", "doublereversed")) |>
+  select(item, subscale, difficulty = b)
+
+item_parameters_multi |>
+  mutate(across(where(is.numeric), ~ round_half_up(.x, digits = 2))) |>
+  kable(align = "r") |>
+  kable_classic(full_width = FALSE)
+
+item_parameters_multi |>
+  group_by(subscale) |>
+  dplyr::summarize(mean_difficulty = mean(difficulty)) |>
+  mutate(across(where(is.numeric), ~ round_half_up(.x, digits = 2))) |>
+  kable(align = "r") |>
+  kable_classic(full_width = FALSE)
+
+```
+
+- p < 0.05 indicates potential model misfit.
+- RMSEA < 0.05: Good fit; RMSEA between 0.05 and 0.08: Acceptable fit; RMSEA > 0.10: Poor fit.
+
+# Session info
+
+```{r}
+
+sessionInfo()
+
+```
+
+
+

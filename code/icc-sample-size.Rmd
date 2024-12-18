@@ -1,0 +1,91 @@
+---
+title: "Calculate N needed to detect ICC of a given size with a given power"
+author: "Ian Hussey"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  html_document:
+    code_folding: hide
+    highlight: haddock
+    theme: flatly
+    toc: yes
+    toc_float: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Dependencies
+
+```{r}
+
+library(ICC.Sample.Size)
+library(knitr)
+library(kableExtra)
+library(assertthat)
+
+```
+
+# Estimate required sample size for different true values of ICC
+
+```{r}
+
+# desired estimation width
+ci_half_width <- 0.1
+power <- 0.80
+
+# compute sample size matrix
+res <- calculateIccSampleSize(k = 2,
+                              alpha = 0.05, 
+                              power = power,
+                              tails = 2,
+                              by = "both")
+
+# ICC 
+ICC <- seq(from = ci_half_width, to = 0.95, by = 0.05)
+
+res[[2]]
+
+# extract Ns
+N <- res[[2]][row(res[[2]]) == col(res[[2]]) + as.integer((ci_half_width*100)/(0.05*100))]
+
+```
+
+- 95% CI width ± `r ci_half_width`
+- Power = `r power`
+
+## Unit tests
+
+```{r}
+
+# ci_half_width must be a multiple of 0.05. check:
+see_if(ci_half_width %% 0.05 == 0, msg = "ci_half_width must be a multiple of 0.05; change value of ci_half_width")
+# length of ICC and N vectors must be identical lengths if they were calculated correctly
+see_if(length(ICC) == length(N), msg = "Length of ICC and N are non-identical; something wrong in code implementation")
+
+```
+
+## Results
+
+```{r}
+
+results <- data.frame(ICC = ICC,
+                      width_95CI = paste("±", ci_half_width),
+                      require_N = N)
+
+# print
+results |>
+  kable() |>
+  kable_classic(full_width = FALSE)
+
+```
+
+# Session info
+
+```{r}
+
+sessionInfo()
+
+```
+
+
