@@ -14,20 +14,11 @@ output:
 
 # TODO
 
-- add distribution plots for all (sub)scales
 - not all subscales in TRT plots
 - add internal consistency subscales
 - add bar plot for IC
-- add second set of correlations for t2? could put in supplementaries
-- could include the PTTA and PTT analyses very briefly as exploratory, ie just to replicate the weird claim that spatial and emotional PT are correlated (no) and that the PTT measures PT (well, doesn't correlate with other PT tasks).
-
-# Overview
-
-All included measures are used as measures of empathy or to make conclusions about empathy. While some may be used to examine different facets of empathy, this distinction is a) not theoretically agreed upon, as there is little consensus around the structure of empathy, and therefore b) not necessarily reflected in their measurement (i.e., low correlations may represent poor convergent validity rather than good discriminant validity).
-
-This study examines a) the reliability of these scales (internal consistency, test-retest reliability) relative to the original published estimates, and b) the risk of jingle fallacy (via correlations among [sub]scales).  
-
-NB EQ subscales based on Lawrence et al., 2004.
+- need to explacate choice to include PTTA as a spatial PT task, or remove it
+- PTP is a shortened version of the protocol. For this to be more widely accepted, we might need to run an additional study with a longer version of it, or drop it from here.
 
 ```{r, include=FALSE}
 knitr::opts_chunk$set(message = FALSE,
@@ -71,7 +62,7 @@ dir.create("plots")
 ```{r}
 
 data_processed <- read_csv("../data/processed/data_processed.csv") |>
-  select(-starts_with("PTP_") & -starts_with("PTTA_"))
+  select(-starts_with("PTP_"))
 
 data_processed_after_exclusions <- data_processed |>
   filter(exclude_master == "include")
@@ -131,10 +122,10 @@ $ICC_{2,1}$
 ```{r}
 
 data_reshaped <- data_processed_after_exclusions |>
-  select(unique_id, timepoint, SITES, IRI_FS, IRI_EC, IRI_PT, IRI_PD, IRI_total, EQ_total, EQ_cog, EQ_aff, EQ_soc, PET_total, EYES_total) |>
+  select(unique_id, timepoint, SITES, IRI_FS, IRI_EC, IRI_PT, IRI_PD, IRI_total, EQ_total, PET_total, EYES_total, PTTA_total) |>
   pivot_wider(id_cols = unique_id,
               names_from = timepoint,
-              values_from = c(SITES, IRI_FS, IRI_EC, IRI_PT, IRI_PD, IRI_total, EQ_total, EQ_cog, EQ_aff, EQ_soc, PET_total, EYES_total))
+              values_from = c(SITES, IRI_FS, IRI_EC, IRI_PT, IRI_PD, IRI_total, EQ_total, PET_total, EYES_total, PTTA_total))
 
 tidy_icc_2_1 <- function(data, scale){
   res <- data |>
@@ -156,11 +147,9 @@ res <- bind_rows(
   tidy_icc_2_1(data_reshaped, "IRI_PD"),
   tidy_icc_2_1(data_reshaped, "IRI_total"),
   tidy_icc_2_1(data_reshaped, "EQ_total"),
-  tidy_icc_2_1(data_reshaped, "EQ_cog"),
-  tidy_icc_2_1(data_reshaped, "EQ_aff"),
-  tidy_icc_2_1(data_reshaped, "EQ_soc"),
   tidy_icc_2_1(data_reshaped, "PET_total"),
-  tidy_icc_2_1(data_reshaped, "EYES_total")
+  tidy_icc_2_1(data_reshaped, "EYES_total"),
+  tidy_icc_2_1(data_reshaped, "PTTA_total")
 )
   
 res |>
@@ -205,7 +194,7 @@ p_trt_subscales <- res |>
 
 p_trt_scales + 
   p_trt_subscales + 
-  plot_layout(ncol = 1, heights = c(1, 1.35))
+  plot_layout(ncol = 1, heights = c(1, .65))
 
 ggsave("plots/trt.png", 
        width = 6,
@@ -229,8 +218,8 @@ res_print <- res |>
   select(scale, string)
 
 data_reshaped_plotting <- data_processed_after_exclusions |>
-  select(unique_id, timepoint, SITES, IRI_FS, IRI_EC, IRI_PT, IRI_PD, IRI_total, EQ_total, EQ_cog, EQ_aff, EQ_soc, PET_total, EYES_total) |>
-  pivot_longer(cols = c(SITES, IRI_FS, IRI_EC, IRI_PT, IRI_PD, IRI_total, EQ_total, EQ_cog, EQ_aff, EQ_soc, PET_total, EYES_total),
+  select(unique_id, timepoint, SITES, IRI_FS, IRI_EC, IRI_PT, IRI_PD, IRI_total, EQ_total, PET_total, EYES_total, PTTA_total) |>
+  pivot_longer(cols = c(SITES, IRI_FS, IRI_EC, IRI_PT, IRI_PD, IRI_total, EQ_total, PET_total, EYES_total, PTTA_total),
                names_to = "scale",
                values_to = "score")
 
@@ -306,8 +295,20 @@ p_trt_6 <- data_reshaped_plotting |>
   ggtitle(bquote("Reading the Mind in the Eyes Test:" ~ ICC["2,1"] ~ .(res_print |> filter(scale == "EYES_total") |> pull(string)))) +
   scale_y_continuous(breaks = scales::breaks_pretty(n = 6))
 
+p_trt_7 <- data_reshaped_plotting |>
+  filter(scale == "PTTA_total") |>
+  ggplot(aes(as.factor(timepoint), score, fill = as.factor(timepoint))) +
+  geom_rain(alpha = .5, rain.side = 'f1x1', id.long.var = "unique_id") +
+  theme_classic() +
+  scale_fill_manual(values=c("dodgerblue", "darkorange")) +
+  guides(fill = 'none', color = 'none') +
+  ylab("Score") +
+  xlab("Time point") +
+  ggtitle(bquote("Perspective Taking Task for Adults:" ~ ICC["2,1"] ~ .(res_print |> filter(scale == "PTTA_total") |> pull(string)))) +
+  scale_y_continuous(breaks = scales::breaks_pretty(n = 6))
+
 p_trt_1 + p_trt_2 + p_trt_3 + p_trt_4 +
-  p_trt_5 + p_trt_6 + 
+  p_trt_5 + p_trt_6 + p_trt_7 + 
   plot_layout(ncol = 2)
 
 ```
@@ -323,8 +324,9 @@ data_subset <- data_processed_after_exclusions |>
                 starts_with("IRI_"), 
                 starts_with("EQ_"),
                 starts_with("PET_"),
-                starts_with("EYES_")) |>
-  dplyr::select(-IRI_FS, -IRI_EC, -IRI_PT, -IRI_PD, -EQ_cog, -EQ_aff, -EQ_soc) |>
+                starts_with("EYES_"),
+                starts_with("PTTA_")) |>
+  dplyr::select(-IRI_FS, -IRI_EC, -IRI_PT, -IRI_PD) |>
   dplyr::select(!ends_with("_completeness") & !ends_with("_total"))
 
 tidy_alpha <- function(data, time, scale){
@@ -350,7 +352,9 @@ res <- bind_rows(
   tidy_alpha(data = data_subset, time = 1, scale = "PET_"),
   #tidy_alpha(data = data_subset, time = 2, scale = "PET_"),
   tidy_alpha(data = data_subset, time = 1, scale = "EYES_"),
-  #tidy_alpha(data = data_subset, time = 2, scale = "EYES_")
+  #tidy_alpha(data = data_subset, time = 2, scale = "EYES_"),
+  tidy_alpha(data = data_subset, time = 1, scale = "PTTA_"),
+  #tidy_alpha(data = data_subset, time = 2, scale = "PTTA_")
 )
 
 res |>
@@ -442,11 +446,6 @@ p1 + ggtitle("Correlation histogram") +
   p2 + ggtitle("Correlation matrix") + 
   plot_layout(ncol = 1, heights = c(.4, 1))
 
-ggsave("plots/cor_scales.png", 
-       width = 6,
-       height = 7,
-       dpi = 600)
-
 ```
 
 ### Subscale correlations
@@ -456,9 +455,10 @@ ggsave("plots/cor_scales.png",
 subscale_cors <- dat |>
   select(SITES, 
          IRI_FS, IRI_EC, IRI_PT, IRI_PD, 
-         EQ_cog, EQ_aff, EQ_soc, 
+         EQ_total,
          PET_total,
-         EYES_total) |>
+         EYES_total,
+         PTTA_total) |>
   rename_with(~ str_remove(.x, "_total")) |>
   correlation() 
 
@@ -488,9 +488,10 @@ p3 <-
 p4 <- dat |>
   select(SITES, 
          IRI_FS, IRI_EC, IRI_PT, IRI_PD, 
-         EQ_cog, EQ_aff, EQ_soc, 
+         EQ_total,
          PET_total,
-         EYES_total) |>
+         EYES_total,
+         PTTA_total) |>
   rename_with(~ str_remove(.x, "_total")) |>
   rename_with(~ str_replace(.x, "_", "\n")) %>%
   select(order(colnames(.))) |>
@@ -511,11 +512,6 @@ p4 <- dat |>
 p3 + ggtitle("Correlation histogram") +
   p4 + ggtitle("Correlation matrix") + 
   plot_layout(ncol = 1, heights = c(.4, 1))
-
-ggsave("plots/cor_subscales.png", 
-       width = 7,
-       height = 9,
-       dpi = 600)
 
 ```
 
