@@ -362,6 +362,8 @@ res |>
 
 ## Correlations
 
+### T1
+
 ```{r}
 
 dat <- data_processed |>
@@ -369,7 +371,7 @@ dat <- data_processed |>
 
 ```
 
-### Scale correlations
+#### Scale correlations
 
 ```{r fig.height=4.5}
 
@@ -389,7 +391,7 @@ res |>
   kable(align = "r") |>
   kable_classic(full_width = FALSE)
 
-p1 <- 
+p1_t1 <- 
   ggplot(res, aes(r)) +
   geom_vline(xintercept = 0, linetype = "dashed") +
   geom_histogram(binwidth = 0.1, boundary = 0) +
@@ -403,7 +405,7 @@ p1 <-
 
 #p1
   
-p2 <- 
+p2_t1 <- 
   scale_cors |>
   summary(redundant = TRUE) |>
   plot(show_data = "points",
@@ -438,18 +440,18 @@ average_cors_all |>
 
 ```{r fig.height=7, fig.width=6}
 
-p1 + ggtitle("Correlation histogram") +
-  p2 + ggtitle("Correlation matrix") + 
+p1_t1 + ggtitle("Correlation histogram") +
+  p2_t1 + ggtitle("Correlation matrix") + 
   plot_layout(ncol = 1, heights = c(.4, 1))
 
-ggsave("plots/cor_scales.png", 
+ggsave("plots/cor_scales_t1.png", 
        width = 6,
        height = 7,
        dpi = 600)
 
 ```
 
-### Subscale correlations
+#### Subscale correlations
 
 ```{r fig.height=6, fig.width=11}
 
@@ -470,7 +472,7 @@ subscale_cors |>
   kable(align = "r") |>
   kable_classic(full_width = FALSE)
 
-p3 <- 
+p3_t1 <- 
   ggplot(subscale_cors, aes(r)) +
   geom_vline(xintercept = 0, linetype = "dashed") +
   geom_histogram(binwidth = 0.1, boundary = 0) +
@@ -482,10 +484,10 @@ p3 <-
   theme_linedraw() +
   theme(panel.grid.minor.y = element_blank())
 
-#p3
+#p3_t1
 
 # code repeated in order to use the rename, which screws up the table but is needed for the plot
-p4 <- dat |>
+p4_t1 <- dat |>
   select(SITES, 
          IRI_FS, IRI_EC, IRI_PT, IRI_PD, 
          EQ_cog, EQ_aff, EQ_soc, 
@@ -502,22 +504,216 @@ p4 <- dat |>
   theme_linedraw() +
   ggtitle("")
 
-#p4
+#p4_t1
 
 ```
 
 ```{r fig.height=9, fig.width=7}
 
-p3 + ggtitle("Correlation histogram") +
-  p4 + ggtitle("Correlation matrix") + 
+p3_t1 + ggtitle("Correlation histogram") +
+  p4_t1 + ggtitle("Correlation matrix") + 
   plot_layout(ncol = 1, heights = c(.4, 1))
 
-ggsave("plots/cor_subscales.png", 
+ggsave("plots/cor_subscales_t1.png", 
        width = 7,
        height = 9,
        dpi = 600)
 
 ```
+
+### T2
+
+```{r}
+
+dat <- data_processed |>
+  filter(timepoint == 2)
+
+```
+
+#### Scale correlations
+
+```{r fig.height=4.5}
+
+scale_cors <- dat |>
+  select(SITES, ends_with("_total")) |>
+  rename_with(~ str_remove(.x, "_total")) %>%
+  select(order(colnames(.))) |>
+  correlation()
+
+res <- scale_cors |>
+  as.data.frame() |>
+  select(Parameter1, Parameter2, r, ci_low = CI_low, ci_high = CI_high, p) 
+
+res |>
+  mutate(p = insight::format_p(p)) |>
+  mutate(across(where(is.numeric), ~ round_half_up(.x, digits = 2))) |>
+  kable(align = "r") |>
+  kable_classic(full_width = FALSE)
+
+p1_t2 <- 
+  ggplot(res, aes(r)) +
+  geom_vline(xintercept = 0, linetype = "dashed") +
+  geom_histogram(binwidth = 0.1, boundary = 0) +
+  scale_x_continuous(limits = c(-1, 1), 
+                     name = "Correlation", 
+                     breaks = scales::breaks_pretty(n = 10)) + 
+  scale_y_continuous(name = "Frequency", 
+                     breaks = scales::breaks_pretty(n = 7)) + 
+  theme_linedraw() +
+  theme(panel.grid.minor.y = element_blank())
+
+#p1_t2
+  
+p2_t2 <- 
+  scale_cors |>
+  summary(redundant = TRUE) |>
+  plot(show_data = "points",
+       stars = FALSE) +
+  theme_linedraw() +
+  ggtitle("")
+
+#p2_t2 + coord_fixed(ratio = 1)
+
+# scale_cors |>
+#   summary() |>
+#   plot(show_data = "points",
+#        stars = FALSE) +
+#   theme_linedraw() +
+#   ggtitle("") +
+#   coord_fixed(ratio = 1)
+
+average_cors_all <- res |>
+  dplyr::summarize(mean_r = mean(r),
+                   sd_r = sd(r),
+                   median_r = median(r),
+                   mad_r = mad(r),
+                   min_r = min(r),
+                   max_r = max(r)) 
+
+average_cors_all |>
+  round_half_up(digits = 2) |>
+  kable() |>
+  kable_classic(full_width = FALSE)
+
+```
+
+```{r fig.height=7, fig.width=6}
+
+p1_t2 + ggtitle("Correlation histogram") +
+  p2_t2 + ggtitle("Correlation matrix") + 
+  plot_layout(ncol = 1, heights = c(.4, 1))
+
+ggsave("plots/cor_scales_t2.png", 
+       width = 6,
+       height = 7,
+       dpi = 600)
+
+```
+
+#### Subscale correlations
+
+```{r fig.height=6, fig.width=11}
+
+subscale_cors <- dat |>
+  select(SITES, 
+         IRI_FS, IRI_EC, IRI_PT, IRI_PD, 
+         EQ_cog, EQ_aff, EQ_soc, 
+         PET_total,
+         EYES_total) |>
+  rename_with(~ str_remove(.x, "_total")) |>
+  correlation() 
+
+subscale_cors |>
+  as.data.frame() |>
+  select(Parameter1, Parameter2, r, ci_low = CI_low, ci_high = CI_high, p) |>
+  mutate(p = insight::format_p(p)) |>
+  mutate(across(where(is.numeric), ~ round_half_up(.x, digits = 2))) |>
+  kable(align = "r") |>
+  kable_classic(full_width = FALSE)
+
+p3_t2 <- 
+  ggplot(subscale_cors, aes(r)) +
+  geom_vline(xintercept = 0, linetype = "dashed") +
+  geom_histogram(binwidth = 0.1, boundary = 0) +
+  scale_x_continuous(limits = c(-1, 1), 
+                     name = "Correlation", 
+                     breaks = scales::breaks_pretty(n = 10)) + 
+  scale_y_continuous(name = "Frequency", 
+                     breaks = scales::breaks_pretty(n = 7)) + 
+  theme_linedraw() +
+  theme(panel.grid.minor.y = element_blank())
+
+#p3_t2
+
+# code repeated in order to use the rename, which screws up the table but is needed for the plot
+p4_t2 <- dat |>
+  select(SITES, 
+         IRI_FS, IRI_EC, IRI_PT, IRI_PD, 
+         EQ_cog, EQ_aff, EQ_soc, 
+         PET_total,
+         EYES_total) |>
+  rename_with(~ str_remove(.x, "_total")) |>
+  rename_with(~ str_replace(.x, "_", "\n")) %>%
+  select(order(colnames(.))) |>
+  correlation() %>%
+  mutate(across(where(is.numeric), ~ round_half_up(., 2))) |>
+  summary(redundant = TRUE) |>
+  plot(show_data = "points",
+       stars = FALSE) +
+  theme_linedraw() +
+  ggtitle("")
+
+#p4_t2
+
+```
+
+```{r fig.height=9, fig.width=7}
+
+p3_t2 + ggtitle("Correlation histogram") +
+  p4_t2 + ggtitle("Correlation matrix") + 
+  plot_layout(ncol = 1, heights = c(.4, 1))
+
+ggsave("plots/cor_subscales_t2.png", 
+       width = 7,
+       height = 9,
+       dpi = 600)
+
+```
+
+### Both times - scales
+
+```{r fig.height=6, fig.width=9.35}
+
+p1_t1 + ggtitle("Correlation histogram (T1)") +
+  p1_t2 + ggtitle("Correlation matrix (T2)") + 
+  p2_t1 + ggtitle("Correlation histogram (T1)") +
+  p2_t2 + ggtitle("Correlation matrix (T2)") + 
+  plot_layout(ncol = 2, heights = c(.4, 1), guides = "collect")
+
+ggsave("plots/cor_scales_both.png", 
+       width = 9.35,
+       height = 6,
+       dpi = 600)
+
+```
+
+### Both times - subscales
+
+```{r fig.height=9, fig.width=13.2}
+
+p3_t1 + ggtitle("Correlation histogram (T1)") +
+  p3_t2 + ggtitle("Correlation matrix (T2)") + 
+  p4_t1 + ggtitle("Correlation histogram (T1)") +
+  p4_t2 + ggtitle("Correlation matrix (T2)") + 
+  plot_layout(ncol = 2, heights = c(.4, 1), guides = "collect")
+
+ggsave("plots/cor_subscales_both.png", 
+       width = 13.2,
+       height = 9,
+       dpi = 600)
+
+```
+
 
 # Session info
 
