@@ -14,9 +14,7 @@ output:
 
 Reworking of Marcus' code
 
-# TODO
-
-- Scoring of PTTA needs to be checked against Jamie's implemenation. Current code merely uses the modal response as the correct one.
+Note that EQ subscales were not part of the original scale, but are based on Lawrence et al., 2004.
 
 ```{r, include=FALSE}
 knitr::opts_chunk$set(message = FALSE,
@@ -161,7 +159,14 @@ data_trimmed <- data_raw %>%
   # drop filler and sample items
   select(!all_of(c("EYES_0", 
                    "EQ_2", "EQ_3", "EQ_5", "EQ_7", "EQ_9", "EQ_13", "EQ_16", "EQ_17", "EQ_20", "EQ_23", 
-                   "EQ_24", "EQ_30", "EQ_31", "EQ_33", "EQ_40", "EQ_45", "EQ_47", "EQ_51", "EQ_53", "EQ_56"))) 
+                   "EQ_24", 
+                   # "EQ_30", # is not used in the total score, but is used in the social skills subscale
+                   # "EQ_31", # is not used in the total score, but is used in the social skills subscale
+                   # "EQ_33", # is not used in the total score, but is used in the social skills subscale
+                   "EQ_40", "EQ_45", "EQ_47", 
+                   # "EQ_51", # is not used in the total score, but is used in the social skills subscale
+                   # "EQ_53", # is not used in the total score, but is used in the social skills subscale
+                   "EQ_56"))) 
 
 ```
 
@@ -206,10 +211,31 @@ data_recoded <- data_trimmed |>
              'E - DESCRIBES ME VERY WELL' = 0)
   )) |>
   
+  # # EQ
+  # mutate(across(
+  #   all_of(c("EQ_1", "EQ_6", "EQ_19", "EQ_22", "EQ_25", "EQ_26", "EQ_35", "EQ_36", "EQ_37", "EQ_38", 
+  #            "EQ_41", "EQ_42", "EQ_43", "EQ_44", "EQ_52", "EQ_54", "EQ_55", "EQ_57", "EQ_58", "EQ_59", "EQ_60")),
+  #   ~ recode(.x,
+  #            'strongly agree' = 2,
+  #            'slightly agree' = 1,
+  #            'slightly disagree' = 0,
+  #            'strongly disagree' = 0)
+  # )) |>
+  # mutate(across(
+  #   all_of(c("EQ_4", "EQ_8", "EQ_10", "EQ_11", "EQ_12", "EQ_14", "EQ_15", "EQ_18", "EQ_21", "EQ_27", "EQ_28", 
+  #            "EQ_29", "EQ_32", "EQ_34", "EQ_39", "EQ_46", "EQ_48", "EQ_49", "EQ_50")),
+  #   ~ recode(.x,
+  #            'strongly agree' = 2,
+  #            'slightly agree' = 1,
+  #            'slightly disagree' = 0,
+  #            'strongly disagree' = 0)
+  # )) |> 
+  
   # EQ
   mutate(across(
     all_of(c("EQ_1", "EQ_6", "EQ_19", "EQ_22", "EQ_25", "EQ_26", "EQ_35", "EQ_36", "EQ_37", "EQ_38", 
-             "EQ_41", "EQ_42", "EQ_43", "EQ_44", "EQ_52", "EQ_54", "EQ_55", "EQ_57", "EQ_58", "EQ_59", "EQ_60")),
+             "EQ_41", "EQ_42", "EQ_43", "EQ_44", "EQ_52", "EQ_54", "EQ_55", "EQ_57", "EQ_58", "EQ_59", 
+             "EQ_60", "EQ_33", "EQ_51", "EQ_53")),   # <-- added EQ_33, EQ_51, EQ_53
     ~ recode(.x,
              'strongly agree' = 2,
              'slightly agree' = 1,
@@ -218,13 +244,13 @@ data_recoded <- data_trimmed |>
   )) |>
   mutate(across(
     all_of(c("EQ_4", "EQ_8", "EQ_10", "EQ_11", "EQ_12", "EQ_14", "EQ_15", "EQ_18", "EQ_21", "EQ_27", "EQ_28", 
-             "EQ_29", "EQ_32", "EQ_34", "EQ_39", "EQ_46", "EQ_48", "EQ_49", "EQ_50")),
+             "EQ_29", "EQ_30", "EQ_31", "EQ_32", "EQ_34", "EQ_39", "EQ_46", "EQ_48", "EQ_49", "EQ_50")),   # <-- added EQ_30, EQ_31
     ~ recode(.x,
-             'strongly agree' = 2,
-             'slightly agree' = 1,
-             'slightly disagree' = 0,
-             'strongly disagree' = 0)
-  )) |> 
+             'strongly agree' = 0,
+             'slightly agree' = 0,
+             'slightly disagree' = 1,
+             'strongly disagree' = 2)
+  )) |>
   
   # PET
   mutate(across(
@@ -350,10 +376,13 @@ data_processed <- data_recoded |>
          IRI_PD = IRI_6 + IRI_10 + IRI_13 + IRI_17 + IRI_19 + IRI_24 + IRI_27,
          IRI_total = IRI_FS + IRI_EC + IRI_PT + IRI_PD) |>
   # EQ
-  mutate(EQ_completeness = ifelse(rowSums(across(starts_with("EQ_"), ~ !is.na(.x))) == 40, "complete", "partial"),
+  mutate(EQ_completeness = ifelse(rowSums(across(starts_with("EQ_"), ~ !is.na(.x))) == 45, "complete", "partial"),
          EQ_total = EQ_1 + EQ_4 + EQ_6 + EQ_8 + EQ_10 + EQ_11 + EQ_12 + EQ_14 + EQ_15 + EQ_18 + EQ_19 + EQ_21 + EQ_22 + EQ_25 + 
            EQ_26 + EQ_27 +  EQ_28 + EQ_29 + EQ_32 + EQ_34 + EQ_35 + EQ_36 + EQ_37 + EQ_38 + EQ_39 + EQ_41 + EQ_42 + EQ_43 + EQ_44 + 
-           EQ_46 + EQ_48 + EQ_49 + EQ_50 + EQ_52 + EQ_54 + EQ_55  + EQ_57 + EQ_58 + EQ_59 + EQ_60 ) |>
+           EQ_46 + EQ_48 + EQ_49 + EQ_50 + EQ_52 + EQ_54 + EQ_55  + EQ_57 + EQ_58 + EQ_59 + EQ_60,
+         EQ_cog = EQ_8 + EQ_19 + EQ_22 + EQ_25 + EQ_26 + EQ_35 + EQ_36 + EQ_41 + EQ_43 + EQ_44 + EQ_52 + EQ_54 + EQ_55 + EQ_58 + EQ_60,
+         EQ_aff = EQ_1 + EQ_6 + EQ_18 + EQ_21 + EQ_32 + EQ_38 + EQ_39 + EQ_42 + EQ_46 + EQ_48 + EQ_50 + EQ_59,
+         EQ_soc = EQ_14 + EQ_29 + EQ_30 + EQ_31 + EQ_33 + EQ_34 + EQ_51 + EQ_53) |>
   
   # PET - the mean score is calculated
   mutate(PET_completeness = ifelse(rowSums(across(starts_with("PET_"), ~ !is.na(.x))) == 7, "complete", "partial"),
@@ -405,7 +434,7 @@ data_processed <- data_recoded |>
          exclude_master, attention_check_1, attention_check_2, SITES_completeness, IRI_completeness, EQ_completeness, PET_completeness, EYES_completeness, PTP_completeness,
          
          # (sub)scale scores
-         SITES, IRI_FS, IRI_EC, IRI_PT, IRI_PD, IRI_total, EQ_total, PET_total, EYES_total, PTP_simple, PTP_reversed, PTP_doublereversed, PTP_total, PTTA_total,
+         SITES, IRI_FS, IRI_EC, IRI_PT, IRI_PD, IRI_total, EQ_total, EQ_cog, EQ_aff, EQ_soc, PET_total, EYES_total, PTP_simple, PTP_reversed, PTP_doublereversed, PTP_total, PTTA_total,
          
          # item level scores
          IRI_1, IRI_2, IRI_3, IRI_4, IRI_5, IRI_6, IRI_7, IRI_8, IRI_9, IRI_10, IRI_11, IRI_12, IRI_13, IRI_14, IRI_15, 
@@ -435,7 +464,7 @@ data_processed <- data_recoded |>
 ```{r fig.height=15, fig.width=15}
 
 dat <- data_processed |>
-  filter(timepoint == 1)
+  filter(timepoint == 1 & exclude_master == "include")
 
 dat |>
   select(starts_with("IRI")) |>
