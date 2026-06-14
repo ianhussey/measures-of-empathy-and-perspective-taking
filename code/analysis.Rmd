@@ -234,6 +234,7 @@ data_reshaped_plotting <- data_processed_after_exclusions |>
                names_to = "scale",
                values_to = "score")
 
+
 p_trt_1 <- data_reshaped_plotting |>
   filter(scale == "IRI_total") |>
   ggplot(aes(as.factor(timepoint), score, fill = as.factor(timepoint))) +
