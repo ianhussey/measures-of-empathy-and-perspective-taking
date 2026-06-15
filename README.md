@@ -1,7 +1,6 @@
-# Measures of empathy and perspective taking
+# A jingle assessment of the McHugh/Barnes-Holmes Perspective Taking Protocol against measures of perspective taking, emapthy and theory of mind
 
-Test-retest reliability, convergent validity, and structural validity  
 
-## TODO
 
-- Scoring of PTTA needs to be checked against Jamie's implemenation. Current code merely uses the modal response as the correct one.
+
+
