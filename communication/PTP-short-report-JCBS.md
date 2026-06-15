@@ -1,3 +1,9 @@
+# MASTER NOW ON GOOGLE DOCS !
+
+
+
+
+
 # The RFT Perspective Taking Protocol has very poor reliability and convergent validity with other measures of perspective taking, empathy, and theory of mind: A jingle assessment
 
 **Ian Hussey¹**, [CO-AUTHORS]
